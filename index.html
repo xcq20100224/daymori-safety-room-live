@@ -3626,12 +3626,618 @@
         opacity: 0.46;
       }
     }
+
+    /* Psychological nightmare main menu: clear readable UI over a living safety-room scene. */
+    .main-menu.main-menu-screen {
+      background: #020201;
+      isolation: isolate;
+    }
+
+    .main-menu .main-menu-top-strip {
+      display: block !important;
+      left: 0;
+      top: 0;
+      width: 37vw;
+      height: clamp(118px, 18vh, 188px);
+      z-index: 14;
+      background:
+        radial-gradient(ellipse 240px 96px at 52% 0%, rgba(250, 209, 151, 0.42) 0%, rgba(214, 157, 91, 0.2) 29%, rgba(0, 0, 0, 0) 72%),
+        linear-gradient(to bottom, rgba(224, 176, 112, 0.18), rgba(0, 0, 0, 0));
+      opacity: 0.85;
+      mix-blend-mode: screen;
+    }
+
+    .main-menu.main-menu-screen::before {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 0;
+      z-index: 28;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(to bottom, rgba(225, 214, 196, 0.038) 0 1px, rgba(0, 0, 0, 0.18) 1px 3px, rgba(0, 0, 0, 0) 3px 5px),
+        linear-gradient(to bottom, rgba(255, 232, 192, 0.015), rgba(0, 0, 0, 0.28));
+      opacity: 0.34;
+      mix-blend-mode: screen;
+      animation: menu-vhs-scan 150ms steps(2, end) infinite;
+    }
+
+    .main-menu.main-menu-screen::after {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 0;
+      z-index: 27;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 28%, rgba(227, 214, 196, 0.12) 0 0.7px, rgba(0, 0, 0, 0) 1.2px),
+        radial-gradient(circle at 72% 64%, rgba(201, 187, 166, 0.08) 0 0.8px, rgba(0, 0, 0, 0) 1.3px),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.78) 100%);
+      background-size: 3px 3px, 5px 5px, auto;
+      opacity: 0.48;
+      mix-blend-mode: screen;
+      animation: menu-grain-drift 7.5s linear infinite;
+    }
+
+    .main-menu .menu-background {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 20% 16%, rgba(208, 158, 94, 0.12) 0%, rgba(0, 0, 0, 0) 26%),
+        radial-gradient(ellipse at 77% 42%, rgba(168, 145, 111, 0.13) 0%, rgba(70, 52, 34, 0.04) 30%, rgba(0, 0, 0, 0) 58%),
+        linear-gradient(90deg, rgba(3, 3, 2, 0.24) 0%, rgba(3, 3, 2, 0.06) 34%, rgba(0, 0, 0, 0.55) 52%, rgba(0, 0, 0, 0.86) 100%),
+        url("menu-main-exact.png") center center / cover no-repeat;
+      transform-origin: 50% 50%;
+      animation: menu-background-breathe 10.8s ease-in-out infinite;
+      --menu-left-width: clamp(380px, 35vw, 670px);
+      --menu-monster-start: clamp(500px, 43vw, 760px);
+    }
+
+    .main-menu.environment-glitch .menu-background,
+    .main-menu.foxy-pressure .menu-background {
+      animation: menu-glitch-shake 138ms steps(2, end) 1, menu-background-breathe 10.8s ease-in-out infinite;
+      cursor: wait;
+    }
+
+    .main-menu .menu-left-panel {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--menu-left-width);
+      z-index: 26;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      align-content: start;
+      gap: clamp(10px, 1.8vh, 18px);
+      padding: clamp(54px, 8vh, 94px) clamp(34px, 4.5vw, 74px) clamp(34px, 6vh, 58px) clamp(44px, 5.8vw, 96px);
+      pointer-events: auto;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 48% 0%, rgba(240, 195, 127, 0.28) 0%, rgba(134, 89, 49, 0.09) 22%, rgba(0, 0, 0, 0) 52%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.68) 0 2px, rgba(0, 0, 0, 0) 2px 9px),
+        repeating-linear-gradient(90deg, rgba(92, 73, 52, 0.2) 0 1px, rgba(0, 0, 0, 0) 1px 54px),
+        repeating-linear-gradient(0deg, rgba(220, 198, 164, 0.03) 0 1px, rgba(0, 0, 0, 0) 1px 21px),
+        radial-gradient(ellipse at 62% 52%, rgba(101, 89, 72, 0.3), rgba(0, 0, 0, 0) 44%),
+        linear-gradient(105deg, rgba(22, 20, 17, 0.97) 0%, rgba(12, 11, 9, 0.98) 55%, rgba(5, 5, 4, 0.98) 100%);
+      border-right: 1px solid rgba(103, 78, 50, 0.28);
+      box-shadow:
+        inset -80px 0 120px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(205, 174, 130, 0.05),
+        36px 0 90px rgba(0, 0, 0, 0.42);
+      animation: menu-left-wall-breathe 11.6s ease-in-out infinite;
+    }
+
+    .main-menu .menu-left-panel::before,
+    .main-menu .menu-left-panel::after {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .main-menu .menu-left-panel::before {
+      background:
+        radial-gradient(ellipse 220px 86px at 55% 0%, rgba(255, 213, 148, 0.36) 0%, rgba(191, 128, 65, 0.12) 35%, rgba(0, 0, 0, 0) 76%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.32) 0 12px, rgba(96, 75, 55, 0.24) 12px 16px, rgba(0, 0, 0, 0) 16px 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.18) 74%, rgba(0, 0, 0, 0.5) 100%);
+      mix-blend-mode: screen;
+      opacity: 0.78;
+    }
+
+    .main-menu .menu-left-panel::after {
+      background:
+        radial-gradient(ellipse at 28% 34%, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0) 42%),
+        radial-gradient(ellipse at 78% 72%, rgba(96, 72, 45, 0.24), rgba(0, 0, 0, 0) 42%),
+        repeating-linear-gradient(96deg, rgba(0, 0, 0, 0.32) 0 2px, rgba(0, 0, 0, 0) 2px 38px),
+        repeating-linear-gradient(177deg, rgba(219, 197, 166, 0.035) 0 1px, rgba(0, 0, 0, 0) 1px 29px);
+      opacity: 0.64;
+      mix-blend-mode: soft-light;
+      animation: menu-wall-grime-drift 14.4s linear infinite;
+    }
+
+    .main-menu .menu-left-panel > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .main-menu .menu-text-echo {
+      display: none !important;
+    }
+
+    .main-menu .main-menu-title,
+    .main-menu .main-menu-subtitle,
+    .main-menu .main-menu-footnote {
+      height: auto;
+      overflow: visible;
+      opacity: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .main-menu .main-menu-title {
+      margin: 0;
+      max-width: min(520px, calc(var(--menu-left-width) - 90px));
+      font-family: "Impact", "Haettenschweiler", "Arial Narrow Bold", sans-serif;
+      font-size: clamp(42px, 4.45vw, 86px);
+      line-height: 0.88;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
+      color: rgba(221, 207, 183, 0.92);
+      text-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.9),
+        0 0 1px rgba(255, 235, 204, 0.3),
+        0 0 16px rgba(0, 0, 0, 0.74);
+      filter: contrast(1.05);
+      animation: menu-title-flicker 12.5s steps(1, end) infinite;
+    }
+
+    .main-menu .main-menu-title span {
+      display: block;
+    }
+
+    .main-menu .main-menu-title span:first-child {
+      max-width: 10.6ch;
+    }
+
+    .main-menu .main-menu-title span:last-child {
+      margin-top: 0.05em;
+      letter-spacing: 0.045em;
+    }
+
+    .main-menu .main-menu-subtitle {
+      margin: clamp(4px, 0.8vh, 10px) 0 0;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: clamp(15px, 1.15vw, 22px);
+      line-height: 1.15;
+      letter-spacing: 0.08em;
+      color: rgba(190, 159, 118, 0.82);
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+    }
+
+    .main-menu .main-menu-actions {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: min(430px, 100%);
+      display: grid;
+      gap: clamp(7px, 1.4vh, 15px);
+      margin: clamp(28px, 5.4vh, 62px) 0 0;
+      pointer-events: auto;
+    }
+
+    .main-menu .main-menu-btn {
+      width: fit-content;
+      min-height: clamp(36px, 5.5vh, 58px);
+      padding: 0 10px 0 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: rgba(224, 207, 180, 0.92);
+      font-family: "Impact", "Haettenschweiler", "Arial Narrow Bold", sans-serif;
+      font-size: clamp(30px, 3.1vw, 58px);
+      line-height: 1;
+      letter-spacing: 0.055em;
+      text-align: left;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 1px rgba(255, 235, 205, 0.26),
+        0 0 12px rgba(0, 0, 0, 0.78);
+      opacity: 1;
+      cursor: pointer;
+      transform: translateX(0);
+      transition: color 120ms ease, opacity 120ms ease, transform 120ms ease, filter 120ms ease;
+    }
+
+    .main-menu .main-menu-btn::before,
+    .main-menu .main-menu-btn.is-selected::before {
+      display: inline-block;
+      width: 2.35ch;
+      content: "";
+      color: rgba(239, 222, 192, 0.98);
+    }
+
+    .main-menu .main-menu-btn.is-selected::before {
+      content: ">>";
+      animation: menu-caret-blink 1.1s steps(1, end) infinite;
+    }
+
+    .main-menu .main-menu-btn:not(.is-selected) {
+      opacity: 0.78;
+    }
+
+    .main-menu .main-menu-btn:hover,
+    .main-menu .main-menu-btn:focus-visible {
+      color: rgba(246, 231, 204, 0.98);
+      opacity: 1;
+      outline: none;
+      filter: brightness(1.12) contrast(1.08);
+      transform: translateX(2px);
+      animation: menu-option-hover-glitch 160ms steps(2, end) 1;
+    }
+
+    .main-menu .main-menu-footnote {
+      align-self: end;
+      margin: clamp(24px, 4vh, 52px) 0 0;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: clamp(12px, 1.05vw, 17px);
+      line-height: 1.2;
+      letter-spacing: 0.1em;
+      color: rgba(162, 132, 98, 0.72);
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+    }
+
+    .main-menu .menu-scene-bridge {
+      left: calc(var(--menu-left-width) - 52px);
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 5;
+      background:
+        linear-gradient(90deg, rgba(11, 9, 7, 0) 0%, rgba(6, 5, 4, 0.56) 10%, rgba(0, 0, 0, 0.78) 34%, rgba(0, 0, 0, 0.88) 100%),
+        radial-gradient(ellipse at 54% 28%, rgba(165, 136, 92, 0.12) 0%, rgba(0, 0, 0, 0) 38%),
+        repeating-linear-gradient(90deg, rgba(116, 92, 61, 0.055) 0 2px, rgba(0, 0, 0, 0) 2px 48px);
+      opacity: 1;
+    }
+
+    .main-menu .menu-scene-bridge::before,
+    .main-menu .menu-scene-bridge::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .main-menu .menu-scene-bridge::before {
+      background: linear-gradient(90deg, rgba(145, 105, 63, 0.14) 0%, rgba(145, 105, 63, 0.06) 32%, rgba(0, 0, 0, 0) 72%);
+      mix-blend-mode: screen;
+      opacity: 0.55;
+      animation: shared-scene-breathe 12s ease-in-out infinite;
+    }
+
+    .main-menu .menu-scene-bridge::after {
+      background: radial-gradient(ellipse at 36% 50%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 74%, rgba(0, 0, 0, 0.78) 100%);
+      opacity: 0.78;
+    }
+
+    .main-menu #character.menu-monster,
+    .main-menu .character-ghost {
+      left: var(--menu-monster-start);
+      right: -4vw;
+      top: -3vh;
+      bottom: -6vh;
+      background-size: auto 112%;
+      background-position: 61% 50%;
+      -webkit-mask-image: radial-gradient(ellipse at 58% 48%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 54%, rgba(0, 0, 0, 0.82) 70%, rgba(0, 0, 0, 0) 100%);
+      mask-image: radial-gradient(ellipse at 58% 48%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 54%, rgba(0, 0, 0, 0.82) 70%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .main-menu #character.menu-monster {
+      z-index: 9;
+      --character-brightness: 0.92;
+      --character-contrast: 1.54;
+      filter:
+        brightness(var(--character-brightness))
+        contrast(var(--character-contrast))
+        saturate(0.74)
+        sepia(0.12)
+        drop-shadow(-16px 0 28px rgba(0, 0, 0, 0.78))
+        drop-shadow(0 0 24px rgba(146, 111, 70, 0.1))
+        blur(var(--character-blur));
+      transition: transform 90ms linear, filter 90ms linear, opacity 70ms linear;
+    }
+
+    .main-menu #character.menu-monster::before {
+      opacity: 0.26;
+    }
+
+    .main-menu #character.menu-monster.is-watching {
+      --character-brightness: 0.52 !important;
+      --character-contrast: 1.9 !important;
+    }
+
+    .main-menu .character-ghost {
+      z-index: 10;
+      opacity: 0;
+      filter: brightness(1.18) contrast(1.8) saturate(0.62) sepia(0.16);
+    }
+
+    .main-menu .edge-hallucination {
+      opacity: 0;
+    }
+
+    .main-menu .wall-breath-layer,
+    .main-menu .wall-stain-layer,
+    .main-menu .wall-shadow-layer,
+    .main-menu .wall-human-layer,
+    .main-menu .wall-local-dim-layer,
+    .main-menu .menu-chroma-layer {
+      z-index: 4;
+      width: var(--menu-left-width);
+      pointer-events: none;
+    }
+
+    .main-menu .wall-breath-layer,
+    .main-menu .wall-stain-layer {
+      opacity: 0.18;
+    }
+
+    .main-menu .wall-shadow-layer,
+    .main-menu .wall-human-layer,
+    .main-menu .wall-local-dim-layer {
+      opacity: 0.12;
+    }
+
+    .main-menu .menu-vignette {
+      z-index: 24;
+      display: block;
+      background:
+        radial-gradient(ellipse at 67% 47%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.24) 48%, rgba(0, 0, 0, 0.86) 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.02) 36%, rgba(0, 0, 0, 0.44) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.48));
+      opacity: 0.78;
+      mix-blend-mode: multiply;
+    }
+
+    .main-menu .vhs-overlay.menu-noise {
+      z-index: 26;
+      opacity: 0.16;
+      mix-blend-mode: screen;
+    }
+
+    .main-menu .vhs-overlay.menu-crt {
+      z-index: 25;
+      opacity: var(--menu-crt-opacity, 0.22);
+      mix-blend-mode: screen;
+    }
+
+    .main-menu .menu-flash {
+      z-index: 29;
+    }
+
+    .main-menu .menu-input-lag {
+      z-index: 30;
+    }
+
+    .main-menu .menu-ui-glitch {
+      left: clamp(44px, 5.8vw, 96px);
+      top: auto;
+      bottom: clamp(190px, 28vh, 310px);
+      z-index: 21;
+      color: rgba(235, 216, 185, 0.42);
+      font-size: clamp(30px, 3.1vw, 58px);
+      opacity: 0.38;
+    }
+
+    @keyframes menu-background-breathe {
+      0% { transform: scale(1); filter: brightness(0.98) contrast(1.02); }
+      48% { transform: scale(1.012); filter: brightness(1.04) contrast(1.06); }
+      100% { transform: scale(1); filter: brightness(0.98) contrast(1.02); }
+    }
+
+    @keyframes menu-left-wall-breathe {
+      0% { filter: brightness(0.96) contrast(1.04); }
+      45% { filter: brightness(1.04) contrast(1.1); }
+      100% { filter: brightness(0.96) contrast(1.04); }
+    }
+
+    @keyframes menu-wall-grime-drift {
+      0% { transform: translate3d(-2px, -3px, 0); opacity: 0.58; }
+      44% { transform: translate3d(3px, 5px, 0); opacity: 0.72; }
+      100% { transform: translate3d(-1px, 9px, 0); opacity: 0.6; }
+    }
+
+    @keyframes menu-vhs-scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(3px); }
+    }
+
+    @keyframes menu-grain-drift {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-13px, 9px, 0); }
+    }
+
+    @keyframes menu-glitch-shake {
+      0% { transform: translate3d(0, 0, 0) scale(1.004); }
+      28% { transform: translate3d(-2px, 1px, 0) scale(1.006); }
+      58% { transform: translate3d(3px, -1px, 0) scale(1.005); }
+      100% { transform: translate3d(0, 0, 0) scale(1.004); }
+    }
+
+    @keyframes menu-title-flicker {
+      0%, 92%, 100% { opacity: 0.94; }
+      93% { opacity: 0.78; transform: translateX(0); }
+      94% { opacity: 0.96; transform: translateX(1px); }
+      95% { opacity: 0.86; transform: translateX(-1px); }
+      96% { opacity: 0.94; transform: translateX(0); }
+    }
+
+    @keyframes menu-option-hover-glitch {
+      0% { text-shadow: 2px 0 rgba(240, 227, 203, 0.18), -1px 0 rgba(90, 44, 32, 0.26), 0 0 12px rgba(0, 0, 0, 0.78); }
+      50% { text-shadow: -2px 0 rgba(240, 227, 203, 0.2), 2px 0 rgba(90, 44, 32, 0.3), 0 0 12px rgba(0, 0, 0, 0.78); }
+      100% { text-shadow: 0 0 1px rgba(255, 235, 205, 0.26), 0 0 12px rgba(0, 0, 0, 0.78); }
+    }
+
+    @media (max-width: 900px) {
+      .main-menu .menu-background {
+        --menu-left-width: clamp(300px, 35vw, 440px);
+        --menu-monster-start: clamp(330px, 43vw, 520px);
+      }
+
+      .main-menu .menu-left-panel {
+        padding: clamp(30px, 6.5vh, 58px) clamp(18px, 4vw, 34px);
+      }
+
+      .main-menu .main-menu-title {
+        font-size: clamp(28px, 5.5vw, 46px);
+      }
+
+      .main-menu .main-menu-btn {
+        font-size: clamp(23px, 5vw, 38px);
+      }
+    }
+
+    /* Direct plate pass: the left menu wall is the real left side of the reference image. */
+    .main-menu .menu-background {
+      --menu-left-width: min(39vw, calc(100vh * 0.74));
+      --menu-monster-start: max(calc(var(--menu-left-width) + 32px), 43vw);
+      background: url("menu-main-exact.png") center center / cover no-repeat;
+      transform: none;
+      animation: menu-plate-filter-breathe 11.4s ease-in-out infinite;
+    }
+
+    .main-menu.environment-glitch .menu-background,
+    .main-menu.foxy-pressure .menu-background {
+      animation: menu-glitch-shake 138ms steps(2, end) 1, menu-plate-filter-breathe 11.4s ease-in-out infinite;
+    }
+
+    .main-menu .menu-left-panel {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--menu-left-width);
+      padding: 0;
+      display: block;
+      overflow: hidden;
+      background: url("menu-main-exact.png") left center / auto 100% no-repeat !important;
+      border-right: 0;
+      box-shadow: none;
+      filter: none;
+      animation: none;
+      -webkit-mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .main-menu .menu-left-panel::before,
+    .main-menu .menu-left-panel::after,
+    .main-menu .main-menu-top-strip,
+    .main-menu .wall-breath-layer,
+    .main-menu .wall-stain-layer,
+    .main-menu .wall-shadow-layer,
+    .main-menu .wall-human-layer,
+    .main-menu .wall-local-dim-layer,
+    .main-menu .menu-chroma-layer,
+    .main-menu .menu-text-echo,
+    .main-menu .menu-ui-glitch {
+      display: none !important;
+    }
+
+    .main-menu .main-menu-title,
+    .main-menu .main-menu-subtitle,
+    .main-menu .main-menu-footnote {
+      position: absolute;
+      display: none !important;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0 !important;
+      pointer-events: none;
+      animation: none !important;
+    }
+
+    .main-menu .main-menu-actions {
+      position: absolute;
+      left: clamp(104px, 8.2vw, 158px);
+      top: clamp(456px, 61.5vh, 650px);
+      width: clamp(250px, 23vw, 420px);
+      display: grid;
+      gap: clamp(18px, 3.2vh, 34px);
+      margin: 0;
+      pointer-events: auto;
+      z-index: 3;
+    }
+
+    .main-menu .main-menu-btn {
+      width: 100%;
+      min-height: clamp(48px, 7vh, 72px);
+      padding: 0;
+      font-size: 0;
+      line-height: 0;
+      color: transparent;
+      text-shadow: none;
+      background: transparent;
+      border: 0;
+      transform: none;
+      filter: none;
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .main-menu .main-menu-btn::before,
+    .main-menu .main-menu-btn.is-selected::before {
+      display: none;
+      content: "";
+    }
+
+    .main-menu .main-menu-btn:hover,
+    .main-menu .main-menu-btn:focus-visible {
+      outline: none;
+      transform: none;
+      filter: none;
+      animation: none;
+      background: rgba(255, 226, 184, 0.035);
+    }
+
+    .main-menu .menu-scene-bridge {
+      left: calc(var(--menu-left-width) - 22px);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.42) 18%, rgba(0, 0, 0, 0.82) 46%, rgba(0, 0, 0, 0.92) 100%);
+      opacity: 0.84;
+    }
+
+    .main-menu .menu-scene-bridge::before,
+    .main-menu .menu-scene-bridge::after {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .main-menu .menu-background {
+        --menu-left-width: min(39vw, calc(100vh * 0.74));
+        --menu-monster-start: max(calc(var(--menu-left-width) + 28px), 43vw);
+      }
+
+      .main-menu .main-menu-actions {
+        left: clamp(70px, 8.2vw, 112px);
+        top: clamp(300px, 61.5vh, 520px);
+        width: clamp(190px, 24vw, 330px);
+        gap: clamp(12px, 3vh, 24px);
+      }
+    }
+
+    @keyframes menu-plate-filter-breathe {
+      0% { filter: brightness(0.98) contrast(1.02); }
+      48% { filter: brightness(1.035) contrast(1.055); }
+      100% { filter: brightness(0.98) contrast(1.02); }
+    }
   </style>
 </head>
 <body class="main-menu-open">
-  <div class="main-menu-screen" id="mainMenuScreen" aria-label="主界面">
+  <div class="main-menu-screen main-menu" id="mainMenuScreen" aria-label="主界面">
     <div class="main-menu-top-strip" aria-hidden="true"></div>
-    <div class="main-menu-layout">
+    <div class="main-menu-layout menu-background">
       <div class="wall-breath-layer" id="wallBreathLayer" aria-hidden="true"></div>
       <div class="wall-stain-layer" id="wallStainLayer" aria-hidden="true"></div>
       <div class="wall-shadow-layer" id="wallShadowLayer" aria-hidden="true"></div>
@@ -3646,24 +4252,20 @@
         <span>Safe</span>
         <span>Room</span>
       </div>
-      <div class="character-void" aria-hidden="true"></div>
-      <div id="character" aria-hidden="true"></div>
+      <div class="character-void menu-scene-bridge" aria-hidden="true"></div>
+      <div id="character" class="menu-monster" aria-hidden="true"></div>
       <div class="character-ghost" id="characterGhost" aria-hidden="true"></div>
       <div class="edge-hallucination" id="edgeHallucination" aria-hidden="true"></div>
-      <div class="menu-noise" id="menuNoise" aria-hidden="true"></div>
-      <div class="menu-crt" id="menuCrt" aria-hidden="true"></div>
+      <div class="menu-noise vhs-overlay" id="menuNoise" aria-hidden="true"></div>
+      <div class="menu-crt vhs-overlay" id="menuCrt" aria-hidden="true"></div>
       <div class="menu-flash" id="menuFlash" aria-hidden="true"></div>
       <div class="menu-input-lag" id="menuInputLag" aria-hidden="true"></div>
       <div class="menu-ui-glitch" id="menuUiGlitch" aria-hidden="true">&gt;&gt; NEW GAME</div>
       <div class="menu-vignette" aria-hidden="true"></div>
-      <section class="main-menu-left">
+      <section class="main-menu-left menu-left-panel">
         <h1 class="main-menu-title">
-          <span>Five</span>
-          <span>Nights</span>
-          <span>At</span>
-          <span>Freddy's</span>
-          <span>Safe</span>
-          <span>Room</span>
+          <span>Five Nights At Freddy's</span>
+          <span>Safe Room</span>
         </h1>
         <p class="main-menu-subtitle">The Beginnings</p>
         <div class="main-menu-actions">
@@ -5777,8 +6379,8 @@
           }
           const temp = weightedPick(currentRole.key);
           character.style.setProperty("--character-image", cssImage(temp));
-          character.style.setProperty("--character-x", `${Math.round(random(-5, 6))}px`);
-          character.style.setProperty("--character-y", `${Math.round(random(-3, 4))}px`);
+          character.style.setProperty("--character-x", `${Math.round(random(-3, 4))}px`);
+          character.style.setProperty("--character-y", `${Math.round(random(-2, 3))}px`);
           step += 1;
           later(tick, random(24, 38));
         };
@@ -5998,8 +6600,8 @@
           if (!watching && !switching) {
             character.style.setProperty("--character-scale", random(1, 1.016).toFixed(4));
             character.style.setProperty("--character-brightness", random(0.9, 1.14).toFixed(3));
-            character.style.setProperty("--character-x", "0px");
-            character.style.setProperty("--character-y", "0px");
+            character.style.setProperty("--character-x", `${random(-1.6, 1.7).toFixed(2)}px`);
+            character.style.setProperty("--character-y", `${random(-1.2, 1.3).toFixed(2)}px`);
             character.style.setProperty("--character-opacity", random(0.9, 1).toFixed(3));
             if (chance(0.085)) {
               character.classList.add("is-flash");
