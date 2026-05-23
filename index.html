@@ -4112,7 +4112,8 @@
 
     .main-menu.environment-glitch .menu-background,
     .main-menu.foxy-pressure .menu-background {
-      animation: menu-glitch-shake 138ms steps(2, end) 1, menu-plate-filter-breathe 11.4s ease-in-out infinite;
+      transform: none !important;
+      animation: menu-plate-filter-breathe 11.4s ease-in-out infinite;
     }
 
     .main-menu .menu-left-panel {
@@ -4203,14 +4204,38 @@
     }
 
     .main-menu .menu-scene-bridge {
-      left: calc(var(--menu-left-width) - 22px);
-      background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.42) 18%, rgba(0, 0, 0, 0.82) 46%, rgba(0, 0, 0, 0.92) 100%);
-      opacity: 0.84;
+      left: calc(var(--menu-left-width) - 18px);
+      background:
+        radial-gradient(ellipse at 66% 31%, rgba(170, 139, 91, 0.17) 0%, rgba(95, 72, 45, 0.07) 33%, rgba(0, 0, 0, 0) 64%),
+        radial-gradient(ellipse at 72% 68%, rgba(100, 88, 67, 0.12) 0%, rgba(0, 0, 0, 0) 48%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(10, 8, 6, 0.16) 18%, rgba(6, 5, 4, 0.44) 48%, rgba(1, 1, 1, 0.7) 100%);
+      opacity: 0.62;
+      filter: brightness(1.18) contrast(1.02);
+      animation: menu-right-bg-breathe 13.5s ease-in-out infinite;
     }
 
     .main-menu .menu-scene-bridge::before,
     .main-menu .menu-scene-bridge::after {
       display: none;
+    }
+
+    .main-menu .menu-vignette {
+      background:
+        radial-gradient(ellipse at 68% 45%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.12) 48%, rgba(0, 0, 0, 0.7) 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.28) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.36));
+      opacity: 0.62;
+    }
+
+    .main-menu.environment-glitch .menu-scene-bridge,
+    .main-menu.foxy-pressure .menu-scene-bridge {
+      transform: translate3d(0.6px, 0px, 0);
+      animation: menu-right-bg-twitch 150ms steps(2, end) 1, menu-right-bg-breathe 13.5s ease-in-out infinite;
+    }
+
+    .main-menu.environment-glitch #character.menu-monster,
+    .main-menu.foxy-pressure #character.menu-monster {
+      animation: menu-character-switch-jitter 150ms steps(2, end) 1;
     }
 
     @media (max-width: 900px) {
@@ -4231,6 +4256,25 @@
       0% { filter: brightness(0.98) contrast(1.02); }
       48% { filter: brightness(1.035) contrast(1.055); }
       100% { filter: brightness(0.98) contrast(1.02); }
+    }
+
+    @keyframes menu-right-bg-breathe {
+      0% { opacity: 0.56; filter: brightness(1.12) contrast(1.02); }
+      52% { opacity: 0.66; filter: brightness(1.24) contrast(1.04); }
+      100% { opacity: 0.56; filter: brightness(1.12) contrast(1.02); }
+    }
+
+    @keyframes menu-right-bg-twitch {
+      0% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0.8px, -0.4px, 0); }
+      100% { transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes menu-character-switch-jitter {
+      0% { transform: translate3d(var(--character-x), var(--character-y), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
+      35% { transform: translate3d(calc(var(--character-x) - 2px), calc(var(--character-y) + 1px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
+      68% { transform: translate3d(calc(var(--character-x) + 2px), calc(var(--character-y) - 1px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
+      100% { transform: translate3d(var(--character-x), var(--character-y), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
     }
   </style>
 </head>
