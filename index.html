@@ -868,6 +868,150 @@
       opacity: 1;
     }
 
+    .comic-room-mode .door-presence {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    body.freddy-disabled .viewport.stage1-mood::before,
+    body.freddy-disabled .viewport.stage2-mood::before,
+    body.freddy-disabled .viewport.stage3-mood::before {
+      opacity: 0.28;
+    }
+
+    body.freddy-disabled .freddy-window-figure,
+    body.freddy-disabled .door-stage2-open,
+    body.freddy-disabled .door-stage3-open {
+      display: none !important;
+      opacity: 0 !important;
+    }
+
+    .tablet-toggle {
+      width: clamp(128px, 17vw, 214px);
+      height: clamp(32px, 4.2vh, 46px);
+      border: 1px solid rgba(242, 245, 246, 0.62);
+      border-radius: 5px;
+      background:
+        linear-gradient(180deg, rgba(246, 248, 248, 0.16), rgba(246, 248, 248, 0.02) 35%, rgba(0, 0, 0, 0.78) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.055) 0 1px, rgba(0, 0, 0, 0) 1px 7px),
+        #050607;
+      color: rgba(246, 248, 248, 0.92);
+      letter-spacing: 0.18em;
+      box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(0, 0, 0, 0.82) inset,
+        0 0 18px rgba(255, 255, 255, 0.06) inset;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.16);
+    }
+
+    .tablet-toggle::before {
+      left: 9%;
+      right: 9%;
+      top: 5px;
+      height: 3px;
+      border-radius: 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0));
+      opacity: 0.78;
+    }
+
+    .tablet-toggle:hover,
+    .tablet-toggle:focus-visible {
+      box-shadow:
+        0 12px 26px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.72) inset,
+        0 0 24px rgba(255, 255, 255, 0.1) inset;
+    }
+
+    .tablet-screen {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0) 34%),
+        rgba(0, 0, 0, 0.96);
+    }
+
+    .tablet-panel {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18) 18%, rgba(0, 0, 0, 0.92) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.026) 0 1px, rgba(0, 0, 0, 0) 1px 11px),
+        #020303;
+      box-shadow: 0 -14px 38px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+
+    .tablet-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(0, 0, 0, 0.08)),
+        repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, rgba(0, 0, 0, 0) 1px 4px);
+      mix-blend-mode: screen;
+      opacity: 0.3;
+    }
+
+    .tablet-header {
+      z-index: 15;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.18));
+      color: rgba(248, 250, 250, 0.9);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
+    }
+
+    .camera-battery-shell,
+    .camera-mute-call,
+    .tablet-close-btn {
+      border-color: rgba(244, 246, 246, 0.66);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.62)),
+        #080909;
+      color: rgba(248, 250, 250, 0.92);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.64), 0 0 0 1px rgba(0, 0, 0, 0.7) inset;
+    }
+
+    .tablet-monitor {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 36%),
+        #010202;
+    }
+
+    .camera-feed {
+      filter: grayscale(1) contrast(1.24) brightness(0.86);
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.44), rgba(0, 0, 0, 0.72)),
+        url("assets/safety-room-comic-reference.jpg") center center / cover no-repeat,
+        #030303;
+    }
+
+    .tablet-map {
+      border: 1px solid rgba(246, 248, 248, 0.48);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.68)),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 1px, rgba(0, 0, 0, 0) 1px 7px),
+        rgba(2, 3, 3, 0.9);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.58), 0 0 0 1px rgba(0, 0, 0, 0.8) inset;
+    }
+
+    .tablet-map-title,
+    .tablet-status,
+    .camera-room-label,
+    .camera-room-stamp {
+      color: rgba(248, 250, 250, 0.9);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.14), 0 0 12px rgba(0, 0, 0, 0.72);
+    }
+
+    .map-room {
+      border-color: rgba(240, 244, 244, 0.5);
+      background: rgba(4, 5, 5, 0.76);
+      color: rgba(244, 246, 246, 0.9);
+    }
+
+    .map-room.is-live,
+    .map-room.is-you {
+      border-color: rgba(255, 255, 255, 0.9);
+      background: rgba(238, 241, 241, 0.14);
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.12);
+    }
+
     .viewport.flashlight-active .photo,
     .viewport.flashlight-active .side-real-photo {
       filter: brightness(0.68) contrast(1.14) saturate(0.78);
@@ -4472,6 +4616,140 @@
       }
     }
 
+    /* Final safety-room gameplay overrides. */
+    .comic-room-mode .door-presence,
+    body.freddy-disabled .door-presence,
+    body.freddy-disabled .freddy-window-figure,
+    body.freddy-disabled .door-stage2-open,
+    body.freddy-disabled .door-stage3-open {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    .tablet-toggle {
+      width: clamp(132px, 17vw, 218px) !important;
+      height: clamp(32px, 4.4vh, 48px) !important;
+      border: 1px solid rgba(244, 246, 246, 0.68) !important;
+      border-radius: 5px !important;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.025) 35%, rgba(0, 0, 0, 0.82) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, rgba(0, 0, 0, 0) 1px 7px),
+        #050606 !important;
+      color: rgba(248, 250, 250, 0.94) !important;
+      letter-spacing: 0.18em !important;
+      box-shadow:
+        0 12px 26px rgba(0, 0, 0, 0.64),
+        0 0 0 1px rgba(0, 0, 0, 0.84) inset,
+        0 0 18px rgba(255, 255, 255, 0.07) inset !important;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.16) !important;
+    }
+
+    .tablet-toggle::before {
+      left: 9% !important;
+      right: 9% !important;
+      top: 5px !important;
+      height: 3px !important;
+      border-radius: 0 !important;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0)) !important;
+      opacity: 0.78 !important;
+    }
+
+    .tablet-screen {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0) 34%),
+        rgba(0, 0, 0, 0.96) !important;
+    }
+
+    .tablet-panel {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18) 18%, rgba(0, 0, 0, 0.92) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.026) 0 1px, rgba(0, 0, 0, 0) 1px 11px),
+        #020303 !important;
+      box-shadow: 0 -14px 38px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+    }
+
+    .tablet-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(0, 0, 0, 0.08)),
+        repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, rgba(0, 0, 0, 0) 1px 4px);
+      mix-blend-mode: screen;
+      opacity: 0.3;
+    }
+
+    .tablet-header {
+      z-index: 15 !important;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.18)) !important;
+      color: rgba(248, 250, 250, 0.9) !important;
+    }
+
+    .camera-battery-shell,
+    .camera-mute-call,
+    .tablet-close-btn {
+      border-color: rgba(244, 246, 246, 0.66) !important;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.62)), #080909 !important;
+      color: rgba(248, 250, 250, 0.92) !important;
+    }
+
+    .camera-feed {
+      filter: grayscale(1) contrast(1.24) brightness(0.86) !important;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.44), rgba(0, 0, 0, 0.72)),
+        url("assets/safety-room-comic-reference.jpg") center center / cover no-repeat,
+        #030303 !important;
+    }
+
+    .tablet-map {
+      border: 1px solid rgba(246, 248, 248, 0.48) !important;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.68)),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 1px, rgba(0, 0, 0, 0) 1px 7px),
+        rgba(2, 3, 3, 0.9) !important;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.58), 0 0 0 1px rgba(0, 0, 0, 0.8) inset !important;
+    }
+
+    .tablet-map-title,
+    .tablet-status,
+    .camera-room-label,
+    .camera-room-stamp {
+      color: rgba(248, 250, 250, 0.9) !important;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.14), 0 0 12px rgba(0, 0, 0, 0.72) !important;
+    }
+
+    .map-room {
+      border-color: rgba(240, 244, 244, 0.5) !important;
+      background: rgba(4, 5, 5, 0.76) !important;
+      color: rgba(244, 246, 246, 0.9) !important;
+    }
+
+    .map-room.is-live,
+    .map-room.is-you {
+      border-color: rgba(255, 255, 255, 0.9) !important;
+      background: rgba(238, 241, 241, 0.14) !important;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.12) !important;
+    }
+
+    @media (max-width: 900px) {
+      .tablet-panel {
+        border-radius: 0 !important;
+      }
+
+      .tablet-map {
+        width: min(248px, 48vw) !important;
+        right: clamp(10px, 2.5vw, 18px) !important;
+        bottom: clamp(10px, 2.5vh, 18px) !important;
+      }
+
+      .tablet-toggle {
+        bottom: max(12px, env(safe-area-inset-bottom)) !important;
+      }
+    }
+
     @keyframes menu-plate-filter-breathe {
       0% { filter: brightness(0.98) contrast(1.02); }
       48% { filter: brightness(1.035) contrast(1.055); }
@@ -4695,9 +4973,12 @@
       const nightHudLabel = document.getElementById("nightHudLabel");
       if (!doorPresence) return;
 
+      body.classList.add("freddy-disabled");
+
       const NIGHT_DURATION_MS = 10 * 60 * 1000;
       const NIGHT_TOTAL_HOURS = 6;
       const NIGHT_ATTACK_COUNT = 5;
+      const FREDDY_ATTACKS_ENABLED = false;
       const STAGE1_DURATION_MIN = 14500;
       const STAGE1_DURATION_MAX = 15500;
       const STAGE2_BREACH_MIN = 25000;
@@ -4894,6 +5175,8 @@
       };
 
       const buildFreddyAttackTimeline = () => {
+        if (!FREDDY_ATTACKS_ENABLED) return [];
+
         const timeline = [];
         const slotBase = NIGHT_DURATION_MS / (NIGHT_ATTACK_COUNT + 1);
         let previous = 0;
@@ -4932,6 +5215,7 @@
       };
 
       const triggerFreddyAttack = () => {
+        if (!FREDDY_ATTACKS_ENABLED) return;
         if (currentDoorStage !== 0 || nightCleared) return;
         clearStageTimers();
         resetFlashlightProgress();
