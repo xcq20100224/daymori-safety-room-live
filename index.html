@@ -4129,7 +4129,7 @@
       box-shadow: none;
       filter: brightness(var(--menu-door-brightness, 1)) contrast(var(--menu-door-contrast, 1));
       transform: none;
-      transition: filter 120ms steps(2, end);
+      transition: filter 180ms ease;
       animation: none;
       -webkit-mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
       mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
@@ -4148,7 +4148,7 @@
       transform: none;
       -webkit-mask-image: radial-gradient(ellipse 27% 13% at 61% 6%, #000 0%, #000 38%, rgba(0, 0, 0, 0.62) 54%, rgba(0, 0, 0, 0) 78%);
       mask-image: radial-gradient(ellipse 27% 13% at 61% 6%, #000 0%, #000 38%, rgba(0, 0, 0, 0.62) 54%, rgba(0, 0, 0, 0) 78%);
-      transition: opacity 90ms steps(2, end), filter 90ms steps(2, end);
+      transition: opacity 150ms ease, filter 150ms ease;
       z-index: 1;
     }
 
@@ -4184,11 +4184,11 @@
 
     .main-menu .main-menu-actions {
       position: absolute;
-      left: clamp(104px, 8.2vw, 158px);
-      top: clamp(456px, 61.5vh, 650px);
-      width: clamp(250px, 23vw, 420px);
+      left: clamp(70px, 9.2vw, 132px);
+      top: clamp(280px, 62.8vh, 486px);
+      width: clamp(170px, 20vw, 300px);
       display: grid;
-      gap: clamp(18px, 3.2vh, 34px);
+      gap: clamp(12px, 2.8vh, 24px);
       margin: 0;
       pointer-events: auto;
       z-index: 3;
@@ -4196,7 +4196,7 @@
 
     .main-menu .main-menu-btn {
       width: 100%;
-      min-height: clamp(48px, 7vh, 72px);
+      min-height: clamp(30px, 7vh, 56px);
       padding: 0;
       font-size: 0;
       line-height: 0;
@@ -4300,10 +4300,10 @@
       }
 
       .main-menu .main-menu-actions {
-        left: clamp(70px, 8.2vw, 112px);
-        top: clamp(300px, 61.5vh, 520px);
-        width: clamp(190px, 24vw, 330px);
-        gap: clamp(12px, 3vh, 24px);
+        left: clamp(52px, 9.2vw, 92px);
+        top: clamp(255px, 62.8vh, 360px);
+        width: clamp(150px, 23vw, 230px);
+        gap: clamp(10px, 2.6vh, 18px);
       }
     }
 
@@ -6692,7 +6692,7 @@
           menuLayout.style.setProperty("--menu-door-brightness", random(isBrightPop ? 1.08 : 0.82, isBrightPop ? 1.28 : 1.05).toFixed(3));
           menuLayout.style.setProperty("--menu-door-contrast", random(isBrightPop ? 1.05 : 0.96, isBrightPop ? 1.14 : 1.06).toFixed(3));
           scheduleLampFlicker();
-        }, chance(0.34) ? random(75, 260) : random(520, 1900));
+        }, chance(0.24) ? random(140, 420) : random(820, 2400));
       };
 
       const scheduleUiUntrust = () => {
@@ -6780,7 +6780,7 @@
             }
           }
           scheduleLivingMotion();
-        }, random(520, 1160));
+        }, random(780, 1500));
       };
 
       const scheduleNoise = () => {
@@ -6791,7 +6791,7 @@
           menuNoise.style.opacity = (0.16 + (Number(getComputedStyle(menuLayout).getPropertyValue("--wall-noise-boost")) || 0) + random(0, 0.06)).toFixed(3);
           menuCrt.style.setProperty("--menu-crt-opacity", random(0.18, 0.32).toFixed(3));
           scheduleNoise();
-        }, random(70, 190));
+        }, random(160, 360));
       };
 
       const handlePointerMove = (event) => {
