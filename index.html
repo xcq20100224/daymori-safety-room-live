@@ -418,22 +418,37 @@
       pointer-events: none;
     }
 
+    .door-stage1-peek {
+      position: absolute;
+      left: calc(var(--door-frame-left) + 1.2%);
+      top: calc(var(--door-frame-top) + 1.8%);
+      width: calc(var(--door-frame-width) - 1.6%);
+      height: calc(var(--door-frame-height) - 2.2%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+      overflow: hidden;
+      clip-path: inset(0 0 0 48%);
+      transition: opacity 160ms linear;
+    }
+
     .freddy-figure {
       position: absolute;
-      left: -118%;
-      bottom: -4%;
-      width: 455%;
-      max-width: none;
-      height: auto;
-      mix-blend-mode: multiply;
-      opacity: 0;
-      filter: brightness(0.82) contrast(1.5) saturate(0.92) sepia(0.04);
-      transform: translate3d(var(--freddy-jitter-x, 0px), var(--freddy-jitter-y, 0px), 0px);
-      z-index: 1;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: 49% 100%;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      mix-blend-mode: normal;
+      opacity: 1;
+      filter: brightness(0.7) contrast(1.42) saturate(0.84) sepia(0.05) drop-shadow(10px 0 18px rgba(0, 0, 0, 0.68));
+      transform: translate3d(calc(-8% + var(--freddy-jitter-x, 0px)), var(--freddy-jitter-y, 0px), 0px) scale(1.06);
+      transform-origin: 52% 100%;
       transition: transform var(--freddy-jitter-dur, 180ms) linear;
       will-change: transform;
-      -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.92) 57%, #000 100%);
-      mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.92) 57%, #000 100%);
     }
 
     .eye-lock-glow {
@@ -473,7 +488,12 @@
     }
 
     .door-stage2-open {
-      clip-path: polygon(3.1% 0%, 100% 0%, 97.1% 100%, 0% 100%);
+      left: calc(var(--door-frame-left) - 1.6%);
+      top: calc(var(--door-frame-top) - 0.4%);
+      width: calc(var(--door-frame-width) + 3.2%);
+      height: calc(var(--door-frame-height) + 1.2%);
+      clip-path: none;
+      overflow: visible;
     }
 
     .door-stage3-open {
@@ -484,8 +504,8 @@
     .door-stage3-open img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: 38% 56%;
+      object-fit: contain;
+      object-position: 50% 100%;
       display: block;
       user-select: none;
       -webkit-user-drag: none;
@@ -494,13 +514,14 @@
       filter: brightness(0.94) contrast(1.18) saturate(0.86);
       transition: transform var(--stage2-jitter-dur, 180ms) linear;
       will-change: transform;
-      -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 1) 74%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%);
-      mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 1) 74%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%);
+      -webkit-mask-image: none;
+      mask-image: none;
     }
 
     .door-stage2-open img {
       transform: translate3d(var(--stage2-jitter-x, 0px), var(--stage2-jitter-y, 0px), 0px) rotate(var(--stage2-jitter-tilt, 0deg)) scale(var(--stage2-jitter-scale, 1));
-      filter: brightness(0.96) contrast(1.2) saturate(0.88) sepia(0.06);
+      transform-origin: 50% 100%;
+      filter: brightness(0.82) contrast(1.34) saturate(0.82) sepia(0.06) drop-shadow(0 18px 22px rgba(0, 0, 0, 0.72));
     }
 
     .door-stage3-open {
@@ -607,16 +628,7 @@
     }
 
     .stage2-door-overlap {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 19.4%;
-      height: 100%;
-      background: linear-gradient(to right, rgba(18, 24, 32, 0.94) 0%, rgba(17, 23, 30, 0.78) 56%, rgba(17, 23, 30, 0.1) 100%);
-      border-right: 1px solid rgba(6, 10, 14, 0.96);
-      box-shadow: 3px 0 10px rgba(0, 0, 0, 0.48);
-      z-index: 3;
-      pointer-events: none;
+      display: none;
     }
 
     .stage3-door-overlap {
@@ -641,8 +653,11 @@
       animation-duration: 2.4s;
     }
 
-    .door-presence.stage1-active .freddy-figure {
+    .door-presence.stage1-active .door-stage1-peek {
       opacity: 0.92;
+    }
+
+    .door-presence.stage1-active .freddy-figure {
       filter: brightness(0.86) contrast(1.58) saturate(0.94) sepia(0.04);
     }
 
@@ -652,7 +667,7 @@
 
     .door-presence.stage2-active .door-window-mask,
     .door-presence.stage2-active .door-outside-shadow,
-    .door-presence.stage2-active .freddy-figure,
+    .door-presence.stage2-active .door-stage1-peek,
     .door-presence.stage2-active .eye-lock-glow {
       opacity: 0;
     }
@@ -4409,19 +4424,14 @@
           <div class="door-outside-shadow"></div>
           <div class="door-window-mask">
             <div class="door-idle-ambience"></div>
-            <img class="freddy-figure" src="assets/freddy-door-open-stage3.jpeg" alt="" />
             <div class="eye-lock-glow"></div>
           </div>
-          <div class="door-stage2-open">
-            <img src="assets/freddy-door-open-stage3.jpeg" alt="" />
-            <div class="stage2-door-overlap" aria-hidden="true"></div>
+          <div class="door-stage1-peek">
+            <img class="freddy-figure" src="freddy.png" alt="" />
           </div>
-          <div class="door-stage3-open">
-            <img src="assets/freddy-door-open-stage3.jpeg" alt="" />
-            <div class="stage3-door-overlap" aria-hidden="true"></div>
-            <div class="stage3-head-jitter" aria-hidden="true"></div>
-            <div class="stage3-arm-left-jitter" aria-hidden="true"></div>
-            <div class="stage3-arm-right-jitter" aria-hidden="true"></div>
+          <div class="door-stage2-open">
+            <img src="freddy.png" alt="" />
+            <div class="stage2-door-overlap" aria-hidden="true"></div>
           </div>
           <div class="stage2-breath-shadow"></div>
         </div>
@@ -4542,12 +4552,10 @@
       const NIGHT_DURATION_MS = 10 * 60 * 1000;
       const NIGHT_TOTAL_HOURS = 6;
       const NIGHT_ATTACK_COUNT = 5;
-      const FIRST_ATTACK_MIN_MS = 6500;
-      const FIRST_ATTACK_MAX_MS = 9500;
       const STAGE1_DURATION_MIN = 14500;
       const STAGE1_DURATION_MAX = 15500;
-      const STAGE2_BREACH_MIN = 7800;
-      const STAGE2_BREACH_MAX = 10500;
+      const STAGE2_BREACH_MIN = 14500;
+      const STAGE2_BREACH_MAX = 18500;
       const FLASHLIGHT_HITS_MIN = 5;
       const FLASHLIGHT_HITS_MAX = 8;
       const FLASHLIGHT_PULSE_MS = 125;
@@ -4746,7 +4754,7 @@
 
         for (let i = 0; i < NIGHT_ATTACK_COUNT; i += 1) {
           if (i === 0) {
-            const planned = randomBetween(FIRST_ATTACK_MIN_MS, FIRST_ATTACK_MAX_MS);
+            const planned = randomBetween(6500, 9500);
             timeline.push(planned);
             previous = planned;
             continue;
@@ -5235,52 +5243,6 @@
         stage3Img.src = stage2Img.getAttribute("src") || "";
         window.setTimeout(syncStage3OverlayImage, 0);
       }, { once: true });
-    })();
-
-    (function removeFreddyWhiteBackground() {
-      const source = "assets/freddy-door-open-stage3.jpeg";
-      const targetEls = Array.from(document.querySelectorAll(".freddy-figure"));
-      if (!targetEls.length) return;
-
-      const image = new Image();
-      image.src = source;
-
-      image.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) return;
-
-        ctx.drawImage(image, 0, 0);
-        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const px = imgData.data;
-
-        for (let i = 0; i < px.length; i += 4) {
-          const r = px[i];
-          const g = px[i + 1];
-          const b = px[i + 2];
-          const a = px[i + 3];
-
-          const avg = (r + g + b) / 3;
-          const neutral = Math.abs(r - g) < 30 && Math.abs(g - b) < 30 && Math.abs(r - b) < 30;
-
-          if (avg > 242) {
-            px[i + 3] = 0;
-          } else if (avg > 205 && neutral) {
-            px[i + 3] = 0;
-          } else if (avg > 165 && neutral) {
-            const fade = Math.max(0, (205 - avg) / 40);
-            px[i + 3] = Math.floor(a * fade * fade);
-          }
-        }
-
-        ctx.putImageData(imgData, 0, 0);
-        const transparentSrc = canvas.toDataURL("image/png");
-        targetEls.forEach((el) => {
-          el.src = transparentSrc;
-        });
-      };
     })();
 
     (function removeClassroomAnimatronicDarkMatte() {
