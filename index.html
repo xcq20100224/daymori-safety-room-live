@@ -4138,21 +4138,17 @@
     .main-menu .menu-left-panel::before {
       content: "";
       position: absolute;
-      left: 29%;
-      top: -2%;
-      width: 36%;
-      height: 23%;
+      inset: 0;
       display: block !important;
       pointer-events: none;
-      background:
-        radial-gradient(ellipse at 50% 18%, rgba(255, 226, 168, 0.86) 0%, rgba(210, 149, 82, 0.38) 18%, rgba(0, 0, 0, 0) 62%),
-        radial-gradient(ellipse at 50% 42%, rgba(232, 176, 106, 0.32) 0%, rgba(0, 0, 0, 0) 72%);
+      background: url("menu-main-exact.png") left center / auto 100% no-repeat;
       mix-blend-mode: screen;
       opacity: var(--menu-lamp-opacity, 0.36);
-      filter: blur(0.8px) brightness(var(--menu-lamp-brightness, 1));
-      transform: translateZ(0) scale(var(--menu-lamp-size, 1));
-      transform-origin: 50% 12%;
-      transition: filter 90ms steps(2, end), transform 90ms steps(2, end), background 90ms steps(2, end);
+      filter: brightness(var(--menu-lamp-brightness, 1)) contrast(1.14) saturate(1.08);
+      transform: none;
+      -webkit-mask-image: radial-gradient(ellipse 27% 13% at 61% 6%, #000 0%, #000 38%, rgba(0, 0, 0, 0.62) 54%, rgba(0, 0, 0, 0) 78%);
+      mask-image: radial-gradient(ellipse 27% 13% at 61% 6%, #000 0%, #000 38%, rgba(0, 0, 0, 0.62) 54%, rgba(0, 0, 0, 0) 78%);
+      transition: opacity 90ms steps(2, end), filter 90ms steps(2, end);
       z-index: 1;
     }
 
@@ -4283,8 +4279,8 @@
 
     .main-menu.environment-glitch .menu-scene-bridge,
     .main-menu.foxy-pressure .menu-scene-bridge {
-      transform: translate3d(0.35px, 0px, 0);
-      animation: menu-right-bg-twitch 280ms steps(2, end) 1, menu-right-bg-breathe 13.5s ease-in-out infinite;
+      transform: none !important;
+      animation: menu-right-bg-breathe 13.5s ease-in-out infinite;
     }
 
     .main-menu.environment-glitch .menu-left-panel,
@@ -4321,12 +4317,6 @@
       0% { opacity: 0.76; filter: brightness(1.44) contrast(1.08) saturate(1.05); }
       52% { opacity: 0.86; filter: brightness(1.62) contrast(1.12) saturate(1.1); }
       100% { opacity: 0.76; filter: brightness(1.44) contrast(1.08) saturate(1.05); }
-    }
-
-    @keyframes menu-right-bg-twitch {
-      0% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(0.45px, -0.22px, 0); }
-      100% { transform: translate3d(0, 0, 0); }
     }
 
     @keyframes menu-character-switch-jitter {
@@ -6697,11 +6687,10 @@
         later(() => {
           if (!isMenuOpen()) return;
           const isBrightPop = chance(0.28);
-          menuLayout.style.setProperty("--menu-lamp-opacity", random(isBrightPop ? 0.62 : 0.18, isBrightPop ? 0.98 : 0.58).toFixed(3));
-          menuLayout.style.setProperty("--menu-lamp-brightness", random(isBrightPop ? 1.2 : 0.82, isBrightPop ? 1.75 : 1.16).toFixed(3));
-          menuLayout.style.setProperty("--menu-lamp-size", random(0.94, 1.08).toFixed(3));
-          menuLayout.style.setProperty("--menu-door-brightness", random(isBrightPop ? 1.03 : 0.94, isBrightPop ? 1.12 : 1.04).toFixed(3));
-          menuLayout.style.setProperty("--menu-door-contrast", random(1.01, 1.06).toFixed(3));
+          menuLayout.style.setProperty("--menu-lamp-opacity", random(isBrightPop ? 0.72 : 0.12, isBrightPop ? 1 : 0.5).toFixed(3));
+          menuLayout.style.setProperty("--menu-lamp-brightness", random(isBrightPop ? 1.45 : 0.74, isBrightPop ? 2.18 : 1.22).toFixed(3));
+          menuLayout.style.setProperty("--menu-door-brightness", random(isBrightPop ? 1.08 : 0.82, isBrightPop ? 1.28 : 1.05).toFixed(3));
+          menuLayout.style.setProperty("--menu-door-contrast", random(isBrightPop ? 1.05 : 0.96, isBrightPop ? 1.14 : 1.06).toFixed(3));
           scheduleLampFlicker();
         }, chance(0.34) ? random(75, 260) : random(520, 1900));
       };
