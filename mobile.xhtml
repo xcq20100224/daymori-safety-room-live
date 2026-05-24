@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#050505" />
-  <title>安全屋场景 Mobile</title>
+  <title>安全屋场景</title>
+  <link rel="preload" as="image" href="menu-main-exact.png" />
   <link rel="preload" as="image" href="assets/safety-room-mobile.jpg" />
   <style type="text/css"><![CDATA[
     html,
@@ -32,13 +33,9 @@
       position: fixed;
       inset: 0;
       z-index: 50;
-      display: grid;
-      align-items: center;
-      padding-left: clamp(34px, 10vw, 112px);
-      background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.78) 32%, rgba(0, 0, 0, 0.25) 100%),
-        url("assets/safety-room-mobile.jpg") center center / cover no-repeat,
-        #050505;
+      display: block;
+      padding: 0;
+      background: #020201 url("menu-main-exact.png") center center / cover no-repeat;
       overflow: hidden;
       transition: opacity 260ms linear, visibility 260ms linear;
     }
@@ -52,13 +49,18 @@
     }
 
     .main-menu::before {
-      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, rgba(0, 0, 0, 0) 1px 5px);
-      opacity: 0.18;
+      background:
+        repeating-linear-gradient(to bottom, rgba(225, 214, 196, 0.038) 0 1px, rgba(0, 0, 0, 0.18) 1px 3px, rgba(0, 0, 0, 0) 3px 5px),
+        linear-gradient(to bottom, rgba(255, 232, 192, 0.015), rgba(0, 0, 0, 0.28));
+      opacity: 0.34;
       mix-blend-mode: screen;
     }
 
     .main-menu::after {
-      background: radial-gradient(ellipse at 72% 46%, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0) 36%), radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72) 78%);
+      background:
+        radial-gradient(ellipse at 68% 45%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 52%, rgba(0, 0, 0, 0.54) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.22));
+      opacity: 0.46;
     }
 
     body:not(.menu-open) .main-menu {
@@ -78,11 +80,24 @@
     }
 
     .menu-panel {
-      position: relative;
-      z-index: 2;
-      width: min(430px, 70vw);
+      position: absolute;
+      left: clamp(52px, 9.2vw, 92px);
+      top: clamp(255px, 62.8vh, 360px);
+      z-index: 3;
+      width: clamp(150px, 23vw, 230px);
       display: grid;
-      gap: clamp(14px, 3vh, 24px);
+      gap: clamp(10px, 2.6vh, 18px);
+    }
+
+    .menu-title,
+    .menu-subtitle,
+    .menu-footnote {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .menu-title {
@@ -109,22 +124,18 @@
     }
 
     .menu-button {
-      width: min(240px, 48vw);
-      min-height: clamp(34px, 6vh, 46px);
+      width: 100%;
+      min-height: clamp(30px, 7vh, 56px);
       border: 0;
       background: transparent;
-      color: rgba(248, 250, 250, 0.9);
-      font-family: Consolas, "Courier New", monospace;
-      font-size: clamp(18px, 3.6vw, 28px);
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-align: left;
-      text-shadow: 0 3px 14px rgba(0, 0, 0, 0.92);
+      color: transparent;
+      font-size: 0;
+      text-shadow: none;
+      -webkit-tap-highlight-color: rgba(255, 226, 184, 0.14);
     }
 
     .menu-button::before {
-      content: "> ";
-      opacity: 0;
+      content: "";
     }
 
     .menu-button:active::before,
@@ -348,10 +359,10 @@
   <section class="main-menu" aria-label="主界面">
     <div class="menu-panel">
       <h1 class="menu-title"><span>Five Nights</span><span>At Freddy's</span><span>Safe Room</span></h1>
-      <p class="menu-subtitle">Night shift mobile build</p>
+      <p class="menu-subtitle">The Beginnings</p>
       <button class="menu-button" type="button" data-start-game="true">NEW GAME</button>
       <button class="menu-button" type="button" data-start-game="true">CONTINUE</button>
-      <p class="menu-footnote">Tap to enable audio</p>
+      <p class="menu-footnote">v0.1.0 · Press Enter to start</p>
     </div>
   </section>
 

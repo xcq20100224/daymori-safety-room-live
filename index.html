@@ -4,19 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>安全屋场景</title>
-  <script>
-    (function routeMobileToLightBuild() {
-      var params = new URLSearchParams(window.location.search);
-      var wantsDesktop = params.get("desktop") === "1";
-      var isMobilePath = /\/mobile\.html$/i.test(window.location.pathname);
-      var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-      var touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-      var compactScreen = Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight) <= 1024;
-      if (!wantsDesktop && !isMobilePath && (coarsePointer || touchDevice) && compactScreen) {
-        window.location.replace("./mobile.html" + window.location.search + window.location.hash);
-      }
-    })();
-  </script>
   <style>
     :root {
       --night-deep: #03070c;
@@ -4659,6 +4646,12 @@
       background: #000 !important;
     }
 
+    .photo-wrap picture {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
     .photo {
       width: 100% !important;
       height: 100% !important;
@@ -4947,7 +4940,10 @@
 
       <section class="panel center-panel comic-room-mode" aria-label="中间安全屋">
         <div class="photo-wrap">
-          <img class="photo" src="assets/safety-room-comic-reference.jpg" alt="安全屋场景" />
+          <picture>
+            <source media="(pointer: coarse), (max-width: 1180px)" srcset="assets/safety-room-mobile.jpg" />
+            <img class="photo" src="assets/safety-room-comic-reference.jpg" alt="安全屋场景" />
+          </picture>
           <div class="book-privacy-mask" aria-hidden="true"></div>
         </div>
         <div class="door-presence" aria-hidden="true">
