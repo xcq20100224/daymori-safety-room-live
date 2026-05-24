@@ -420,16 +420,28 @@
 
     .door-stage1-peek {
       position: absolute;
-      left: calc(var(--door-frame-left) + 1.2%);
-      top: calc(var(--door-frame-top) + 1.8%);
-      width: calc(var(--door-frame-width) - 1.6%);
-      height: calc(var(--door-frame-height) - 2.2%);
+      left: calc(var(--door-frame-left) + 0.6%);
+      top: calc(var(--door-frame-top) + 2.3%);
+      width: calc(var(--door-frame-width) + 0.9%);
+      height: calc(var(--door-frame-height) - 1.4%);
       opacity: 0;
       pointer-events: none;
-      z-index: 5;
+      z-index: 4;
       overflow: hidden;
-      clip-path: inset(0 0 0 48%);
+      clip-path: polygon(45% 0%, 100% 0%, 97% 100%, 42% 100%);
       transition: opacity 160ms linear;
+    }
+
+    .door-stage1-peek::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.42) 52%, rgba(0, 0, 0, 0.02) 100%),
+        radial-gradient(ellipse at 66% 28%, rgba(80, 91, 101, 0.18) 0%, rgba(12, 16, 21, 0.02) 54%);
+      mix-blend-mode: multiply;
     }
 
     .freddy-figure {
@@ -445,10 +457,11 @@
       mix-blend-mode: normal;
       opacity: 1;
       filter: brightness(0.7) contrast(1.42) saturate(0.84) sepia(0.05) drop-shadow(10px 0 18px rgba(0, 0, 0, 0.68));
-      transform: translate3d(calc(-8% + var(--freddy-jitter-x, 0px)), var(--freddy-jitter-y, 0px), 0px) scale(1.06);
+      transform: translate3d(calc(-6% + var(--freddy-jitter-x, 0px)), var(--freddy-jitter-y, 0px), 0px) scale(1.04);
       transform-origin: 52% 100%;
       transition: transform var(--freddy-jitter-dur, 180ms) linear;
       will-change: transform;
+      z-index: 1;
     }
 
     .eye-lock-glow {
@@ -488,10 +501,10 @@
     }
 
     .door-stage2-open {
-      left: calc(var(--door-frame-left) - 1.6%);
-      top: calc(var(--door-frame-top) - 0.4%);
-      width: calc(var(--door-frame-width) + 3.2%);
-      height: calc(var(--door-frame-height) + 1.2%);
+      left: calc(var(--door-frame-left) - 3.25%);
+      top: calc(var(--door-frame-top) - 1.7%);
+      width: calc(var(--door-frame-width) + 6.3%);
+      height: calc(var(--door-frame-height) + 4.2%);
       clip-path: none;
       overflow: visible;
     }
@@ -519,7 +532,8 @@
     }
 
     .door-stage2-open img {
-      transform: translate3d(var(--stage2-jitter-x, 0px), var(--stage2-jitter-y, 0px), 0px) rotate(var(--stage2-jitter-tilt, 0deg)) scale(var(--stage2-jitter-scale, 1));
+      z-index: 3;
+      transform: translate3d(calc(1.2% + var(--stage2-jitter-x, 0px)), calc(1.6% + var(--stage2-jitter-y, 0px)), 0px) rotate(var(--stage2-jitter-tilt, 0deg)) scale(var(--stage2-jitter-scale, 1));
       transform-origin: 50% 100%;
       filter: brightness(0.82) contrast(1.34) saturate(0.82) sepia(0.06) drop-shadow(0 18px 22px rgba(0, 0, 0, 0.72));
     }
@@ -576,28 +590,35 @@
     .door-stage2-open::before {
       content: "";
       position: absolute;
-      inset: 0;
-      z-index: 2;
+      left: 16%;
+      top: 2.3%;
+      width: 68%;
+      height: 94.4%;
+      z-index: 0;
       pointer-events: none;
       background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0.44) 18%, rgba(255, 255, 255, 0.06) 36%, rgba(0, 0, 0, 0.2) 50%, rgba(255, 255, 255, 0.05) 64%, rgba(0, 0, 0, 0.56) 100%),
-        radial-gradient(ellipse at 50% 90%, rgba(0, 0, 0, 0.44) 0%, rgba(0, 0, 0, 0) 60%),
-        radial-gradient(ellipse at 52% 22%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 48%);
-      mix-blend-mode: multiply;
-      opacity: 0.42;
+        linear-gradient(90deg, rgba(1, 3, 6, 0.98) 0%, rgba(3, 6, 10, 0.9) 50%, rgba(1, 3, 6, 0.98) 100%),
+        radial-gradient(ellipse at 50% 42%, rgba(76, 87, 98, 0.22) 0%, rgba(2, 4, 7, 0.04) 58%);
+      box-shadow: 0 0 0 1px rgba(4, 7, 10, 0.92) inset, 0 12px 28px rgba(0, 0, 0, 0.7) inset;
+      clip-path: polygon(4% 0%, 100% 0%, 95% 100%, 0% 100%);
+      opacity: 0.94;
     }
 
     .door-stage2-open::after {
       content: "";
       position: absolute;
-      inset: 0;
-      z-index: 4;
+      left: 2.4%;
+      top: 2.5%;
+      width: 22%;
+      height: 94%;
+      z-index: 2;
       pointer-events: none;
       background:
-        linear-gradient(to bottom, rgba(5, 9, 15, 0.08) 0%, rgba(4, 8, 13, 0.42) 100%),
-        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 2px, rgba(0, 0, 0, 0) 2px 5px);
-      mix-blend-mode: soft-light;
-      opacity: 0.18;
+        linear-gradient(90deg, rgba(10, 13, 17, 0.98) 0%, rgba(22, 27, 32, 0.88) 58%, rgba(4, 7, 11, 0.1) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, rgba(0, 0, 0, 0) 1px 5px);
+      transform: skewY(-1.2deg);
+      box-shadow: 5px 0 14px rgba(0, 0, 0, 0.55);
+      opacity: 0.88;
     }
 
     .door-stage3-open::before {
@@ -628,7 +649,15 @@
     }
 
     .stage2-door-overlap {
-      display: none;
+      position: absolute;
+      left: 71%;
+      top: 4%;
+      width: 14%;
+      height: 91%;
+      z-index: 4;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(4, 7, 10, 0) 0%, rgba(5, 7, 10, 0.42) 42%, rgba(0, 0, 0, 0.76) 100%);
+      filter: blur(0.2px);
     }
 
     .stage3-door-overlap {
@@ -4427,10 +4456,10 @@
             <div class="eye-lock-glow"></div>
           </div>
           <div class="door-stage1-peek">
-            <img class="freddy-figure" src="freddy.png" alt="" />
+            <img class="freddy-figure door-freddy-model" src="freddy.png" alt="" />
           </div>
           <div class="door-stage2-open">
-            <img src="freddy.png" alt="" />
+            <img class="door-freddy-model" src="freddy.png" alt="" />
             <div class="stage2-door-overlap" aria-hidden="true"></div>
           </div>
           <div class="stage2-breath-shadow"></div>
@@ -4554,8 +4583,8 @@
       const NIGHT_ATTACK_COUNT = 5;
       const STAGE1_DURATION_MIN = 14500;
       const STAGE1_DURATION_MAX = 15500;
-      const STAGE2_BREACH_MIN = 14500;
-      const STAGE2_BREACH_MAX = 18500;
+      const STAGE2_BREACH_MIN = 25000;
+      const STAGE2_BREACH_MAX = 30000;
       const FLASHLIGHT_HITS_MIN = 5;
       const FLASHLIGHT_HITS_MAX = 8;
       const FLASHLIGHT_PULSE_MS = 125;
@@ -5414,6 +5443,75 @@
 
       Promise.all(targets.map((el) => processImage(el))).catch(() => {
       });
+    })();
+
+    (function prepareDoorFreddyCutouts() {
+      const targets = Array.from(document.querySelectorAll(".door-freddy-model"));
+      if (!targets.length) return;
+
+      const source = targets[0].getAttribute("src") || "freddy.png";
+      const raw = new Image();
+      raw.src = source;
+
+      const clamp01 = (value) => Math.min(1, Math.max(0, value));
+      const smoothstep = (edge0, edge1, value) => {
+        const t = clamp01((value - edge0) / (edge1 - edge0));
+        return t * t * (3 - 2 * t);
+      };
+      const ellipseMask = (x, y, cx, cy, rx, ry, feather = 0.18) => {
+        const d = (((x - cx) / rx) ** 2) + (((y - cy) / ry) ** 2);
+        return 1 - smoothstep(1, 1 + feather, d);
+      };
+
+      raw.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = raw.naturalWidth;
+        canvas.height = raw.naturalHeight;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        if (!ctx) return;
+
+        ctx.drawImage(raw, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const px = imageData.data;
+        const width = canvas.width;
+        const height = canvas.height;
+
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const i = (y * width + x) * 4;
+            const nx = x / Math.max(1, width - 1);
+            const ny = y / Math.max(1, height - 1);
+            const r = px[i];
+            const g = px[i + 1];
+            const b = px[i + 2];
+            const luminance = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255;
+
+            const head = ellipseMask(nx, ny, 0.505, 0.215, 0.188, 0.17, 0.22);
+            const hat = ellipseMask(nx, ny, 0.505, 0.07, 0.105, 0.075, 0.16);
+            const leftEar = ellipseMask(nx, ny, 0.345, 0.18, 0.072, 0.082, 0.2);
+            const rightEar = ellipseMask(nx, ny, 0.665, 0.18, 0.074, 0.084, 0.2);
+            const torso = ellipseMask(nx, ny, 0.505, 0.56, 0.245, 0.318, 0.24);
+            const leftArm = ellipseMask(nx, ny, 0.272, 0.604, 0.112, 0.278, 0.22);
+            const rightArm = ellipseMask(nx, ny, 0.748, 0.602, 0.118, 0.292, 0.22);
+            const leftLeg = ellipseMask(nx, ny, 0.42, 0.872, 0.106, 0.205, 0.2);
+            const rightLeg = ellipseMask(nx, ny, 0.588, 0.872, 0.108, 0.205, 0.2);
+            const mic = ellipseMask(nx, ny, 0.27, 0.655, 0.075, 0.15, 0.18);
+            const centralDetail = ellipseMask(nx, ny, 0.505, 0.515, 0.31, 0.51, 0.34) * smoothstep(0.035, 0.16, luminance);
+            const silhouette = Math.max(head, hat, leftEar, rightEar, torso, leftArm, rightArm, leftLeg, rightLeg, mic, centralDetail * 0.72);
+            const edgeFade = smoothstep(0.025, 0.11, nx) * (1 - smoothstep(0.89, 0.985, nx)) * smoothstep(0.005, 0.06, ny) * (1 - smoothstep(0.995, 1.0, ny));
+            const alpha = clamp01(silhouette * edgeFade * 1.28);
+
+            px[i + 3] = Math.round(px[i + 3] * alpha);
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        const cleanSrc = canvas.toDataURL("image/png");
+        targets.forEach((target) => {
+          target.src = cleanSrc;
+          target.dataset.cutoutReady = "1";
+        });
+      };
     })();
 
     (function initFreddyUnevenJitter() {
