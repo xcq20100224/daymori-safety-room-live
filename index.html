@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>安全屋场景</title>
+  <script>
+    (function routeMobileToLightBuild() {
+      var params = new URLSearchParams(window.location.search);
+      var wantsDesktop = params.get("desktop") === "1";
+      var isMobilePath = /\/mobile\.html$/i.test(window.location.pathname);
+      var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+      var touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+      var compactScreen = Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight) <= 1024;
+      if (!wantsDesktop && !isMobilePath && (coarsePointer || touchDevice) && compactScreen) {
+        window.location.replace("./mobile.html" + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
   <style>
     :root {
       --night-deep: #03070c;
