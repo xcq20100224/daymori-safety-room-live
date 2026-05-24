@@ -4206,11 +4206,11 @@
     .main-menu .menu-scene-bridge {
       left: calc(var(--menu-left-width) - 18px);
       background:
-        radial-gradient(ellipse at 66% 31%, rgba(170, 139, 91, 0.17) 0%, rgba(95, 72, 45, 0.07) 33%, rgba(0, 0, 0, 0) 64%),
-        radial-gradient(ellipse at 72% 68%, rgba(100, 88, 67, 0.12) 0%, rgba(0, 0, 0, 0) 48%),
-        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(10, 8, 6, 0.16) 18%, rgba(6, 5, 4, 0.44) 48%, rgba(1, 1, 1, 0.7) 100%);
-      opacity: 0.62;
-      filter: brightness(1.18) contrast(1.02);
+        radial-gradient(ellipse at 64% 28%, rgba(196, 165, 112, 0.24) 0%, rgba(126, 96, 60, 0.1) 35%, rgba(0, 0, 0, 0) 66%),
+        radial-gradient(ellipse at 70% 66%, rgba(128, 112, 84, 0.18) 0%, rgba(0, 0, 0, 0) 50%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(12, 9, 7, 0.1) 18%, rgba(7, 6, 5, 0.28) 48%, rgba(1, 1, 1, 0.56) 100%);
+      opacity: 0.74;
+      filter: brightness(1.38) contrast(1.08) saturate(1.04);
       animation: menu-right-bg-breathe 13.5s ease-in-out infinite;
     }
 
@@ -4221,38 +4221,38 @@
 
     .main-menu #character.menu-monster,
     .main-menu .character-ghost {
-      left: max(calc(var(--menu-left-width) + 14px), 40vw);
-      right: -9vw;
-      top: -9vh;
-      bottom: -11vh;
-      background-size: auto 126%;
-      background-position: 58% 45%;
+      left: max(calc(var(--menu-left-width) - 8px), 37vw);
+      right: -16vw;
+      top: -15vh;
+      bottom: -16vh;
+      background-size: auto 145%;
+      background-position: 56% 43%;
     }
 
     .main-menu #character.menu-monster {
-      --character-brightness: 1.2;
-      --character-contrast: 1.68;
+      --character-brightness: 1.42;
+      --character-contrast: 1.78;
       filter:
         brightness(var(--character-brightness))
         contrast(var(--character-contrast))
-        saturate(0.84)
-        sepia(0.08)
+        saturate(0.92)
+        sepia(0.06)
         drop-shadow(-18px 0 28px rgba(0, 0, 0, 0.74))
-        drop-shadow(0 0 18px rgba(198, 164, 110, 0.12))
+        drop-shadow(0 0 22px rgba(213, 177, 118, 0.16))
         blur(var(--character-blur));
     }
 
     .main-menu #character.menu-monster.is-watching {
-      --character-brightness: 0.78 !important;
+      --character-brightness: 0.96 !important;
       --character-contrast: 1.92 !important;
     }
 
     .main-menu .menu-vignette {
       background:
-        radial-gradient(ellipse at 68% 45%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.12) 48%, rgba(0, 0, 0, 0.7) 100%),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.28) 100%),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.36));
-      opacity: 0.62;
+        radial-gradient(ellipse at 68% 45%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.62) 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.22) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.28));
+      opacity: 0.54;
     }
 
     .main-menu.environment-glitch .menu-scene-bridge,
@@ -4292,9 +4292,9 @@
     }
 
     @keyframes menu-right-bg-breathe {
-      0% { opacity: 0.56; filter: brightness(1.12) contrast(1.02); }
-      52% { opacity: 0.66; filter: brightness(1.24) contrast(1.04); }
-      100% { opacity: 0.56; filter: brightness(1.12) contrast(1.02); }
+      0% { opacity: 0.68; filter: brightness(1.3) contrast(1.06) saturate(1.02); }
+      52% { opacity: 0.78; filter: brightness(1.46) contrast(1.1) saturate(1.06); }
+      100% { opacity: 0.68; filter: brightness(1.3) contrast(1.06) saturate(1.02); }
     }
 
     @keyframes menu-right-bg-twitch {
@@ -6681,11 +6681,11 @@
         later(() => {
           if (!isMenuOpen()) return;
           if (!watching && !switching) {
-            character.style.setProperty("--character-scale", random(1.018, 1.045).toFixed(4));
-            character.style.setProperty("--character-brightness", random(1.12, 1.34).toFixed(3));
+            character.style.setProperty("--character-scale", random(1.045, 1.082).toFixed(4));
+            character.style.setProperty("--character-brightness", random(1.34, 1.58).toFixed(3));
             character.style.setProperty("--character-x", `${random(-1.6, 1.7).toFixed(2)}px`);
             character.style.setProperty("--character-y", `${random(-1.2, 1.3).toFixed(2)}px`);
-            character.style.setProperty("--character-opacity", random(0.96, 1).toFixed(3));
+            character.style.setProperty("--character-opacity", random(0.98, 1).toFixed(3));
             if (chance(0.085)) {
               character.classList.add("is-flash");
               later(() => character.classList.remove("is-flash"), random(18, 58));
