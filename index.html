@@ -420,18 +420,20 @@
 
     .freddy-figure {
       position: absolute;
-      left: -298%;
-      bottom: -0.6%;
-      width: 666%;
+      left: -118%;
+      bottom: -4%;
+      width: 455%;
       max-width: none;
       height: auto;
       mix-blend-mode: multiply;
       opacity: 0;
-      filter: brightness(0.76) contrast(1.58) saturate(0.96);
+      filter: brightness(0.82) contrast(1.5) saturate(0.92) sepia(0.04);
       transform: translate3d(var(--freddy-jitter-x, 0px), var(--freddy-jitter-y, 0px), 0px);
       z-index: 1;
       transition: transform var(--freddy-jitter-dur, 180ms) linear;
       will-change: transform;
+      -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.92) 57%, #000 100%);
+      mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.92) 57%, #000 100%);
     }
 
     .eye-lock-glow {
@@ -498,7 +500,7 @@
 
     .door-stage2-open img {
       transform: translate3d(var(--stage2-jitter-x, 0px), var(--stage2-jitter-y, 0px), 0px) rotate(var(--stage2-jitter-tilt, 0deg)) scale(var(--stage2-jitter-scale, 1));
-      filter: brightness(0.91) contrast(1.18) saturate(0.85) sepia(0.04);
+      filter: brightness(0.96) contrast(1.2) saturate(0.88) sepia(0.06);
     }
 
     .door-stage3-open {
@@ -640,8 +642,8 @@
     }
 
     .door-presence.stage1-active .freddy-figure {
-      opacity: 0.88;
-      filter: brightness(0.84) contrast(1.62) saturate(0.98);
+      opacity: 0.92;
+      filter: brightness(0.86) contrast(1.58) saturate(0.94) sepia(0.04);
     }
 
     .door-presence.stage1-active .eye-lock-glow {
@@ -658,7 +660,7 @@
     .door-presence.stage2-active .door-stage2-open {
       opacity: 1;
       transform: translateZ(0);
-      animation: stage-door-lean 3.4s ease-in-out infinite;
+      animation: stage-door-lean 2.6s ease-in-out infinite;
     }
 
     .door-presence.stage3-active .door-window-mask,
@@ -4407,11 +4409,11 @@
           <div class="door-outside-shadow"></div>
           <div class="door-window-mask">
             <div class="door-idle-ambience"></div>
-            <img class="freddy-figure" src="assets/freddy-door.jpeg" alt="" />
+            <img class="freddy-figure" src="assets/freddy-door-open-stage3.jpeg" alt="" />
             <div class="eye-lock-glow"></div>
           </div>
           <div class="door-stage2-open">
-            <img src="assets/freddy-door-open-stage2.jpeg" alt="" />
+            <img src="assets/freddy-door-open-stage3.jpeg" alt="" />
             <div class="stage2-door-overlap" aria-hidden="true"></div>
           </div>
           <div class="door-stage3-open">
@@ -4540,12 +4542,10 @@
       const NIGHT_DURATION_MS = 10 * 60 * 1000;
       const NIGHT_TOTAL_HOURS = 6;
       const NIGHT_ATTACK_COUNT = 5;
-      const STAGE1_DURATION_MIN = 3600;
-      const STAGE1_DURATION_MAX = 5400;
-      const STAGE2_DURATION_MIN = 4200;
-      const STAGE2_DURATION_MAX = 6800;
-      const STAGE3_DURATION_MIN = 2600;
-      const STAGE3_DURATION_MAX = 3800;
+      const STAGE1_DURATION_MIN = 14500;
+      const STAGE1_DURATION_MAX = 15500;
+      const STAGE2_BREACH_MIN = 7800;
+      const STAGE2_BREACH_MAX = 10500;
       const FLASHLIGHT_HITS_MIN = 5;
       const FLASHLIGHT_HITS_MAX = 8;
       const FLASHLIGHT_PULSE_MS = 125;
@@ -4553,7 +4553,6 @@
       const FLASHLIGHT_HIT_CLASS_MS = 145;
 
       let stage2Timer = null;
-      let stage3Timer = null;
       let flashlightPulseTimer = null;
       let flashlightRecoverTimer = null;
       let flashlightHitTimer = null;
@@ -4619,10 +4618,6 @@
         if (stage2Timer) {
           window.clearTimeout(stage2Timer);
           stage2Timer = null;
-        }
-        if (stage3Timer) {
-          window.clearTimeout(stage3Timer);
-          stage3Timer = null;
         }
       };
 
@@ -4720,14 +4715,15 @@
       };
 
       const setDoorStage = (stage) => {
-        currentDoorStage = stage;
-        doorPresence.classList.toggle("stage1-active", stage === 1);
-        doorPresence.classList.toggle("stage2-active", stage === 2);
-        doorPresence.classList.toggle("stage3-active", stage === 3);
+        const nextStage = stage === 1 || stage === 2 ? stage : 0;
+        currentDoorStage = nextStage;
+        doorPresence.classList.toggle("stage1-active", nextStage === 1);
+        doorPresence.classList.toggle("stage2-active", nextStage === 2);
+        doorPresence.classList.remove("stage3-active");
         if (viewport) {
-          viewport.classList.toggle("stage1-mood", stage === 1);
-          viewport.classList.toggle("stage2-mood", stage === 2);
-          viewport.classList.toggle("stage3-mood", stage === 3);
+          viewport.classList.toggle("stage1-mood", nextStage === 1);
+          viewport.classList.toggle("stage2-mood", nextStage === 2);
+          viewport.classList.remove("stage3-mood");
         }
       };
 
@@ -4766,18 +4762,10 @@
         setDoorStage(2);
 
         stage2Timer = window.setTimeout(() => {
-          enterStage3();
-        }, randomBetween(STAGE2_DURATION_MIN, STAGE2_DURATION_MAX));
+          forceFreddyBackToIdle("breach");
+        }, randomBetween(STAGE2_BREACH_MIN, STAGE2_BREACH_MAX));
 
         updateNightDebug();
-      };
-
-      const enterStage3 = () => {
-        if (currentDoorStage !== 2 || nightCleared) return;
-        setDoorStage(3);
-        stage3Timer = window.setTimeout(() => {
-          forceFreddyBackToIdle("breach");
-        }, randomBetween(STAGE3_DURATION_MIN, STAGE3_DURATION_MAX));
       };
 
       const triggerFreddyAttack = () => {
@@ -5241,7 +5229,7 @@
     })();
 
     (function removeFreddyWhiteBackground() {
-      const source = "assets/freddy-door.jpeg";
+      const source = "assets/freddy-door-open-stage3.jpeg";
       const targetEls = Array.from(document.querySelectorAll(".freddy-figure"));
       if (!targetEls.length) return;
 
