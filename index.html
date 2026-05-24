@@ -4617,6 +4617,25 @@
     }
 
     /* Final safety-room gameplay overrides. */
+    .viewport {
+      --scene-scale: 1 !important;
+      --scene-stretch-y: 1 !important;
+      --scene-shift-y: 0% !important;
+    }
+
+    .photo-wrap {
+      background: #000 !important;
+    }
+
+    .photo {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: 50% 50% !important;
+      transform: none !important;
+      transform-origin: 50% 50% !important;
+    }
+
     .comic-room-mode .door-presence,
     body.freddy-disabled .door-presence,
     body.freddy-disabled .freddy-window-figure,
