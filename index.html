@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>安全屋场景</title>
   <style>
     :root {
@@ -19,10 +19,13 @@
       margin: 0;
       width: 100%;
       height: 100%;
+      min-height: 100dvh;
       overflow: hidden;
       background: radial-gradient(circle at 50% 22%, #10213a 0%, #060b13 45%, #02050a 100%);
       font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
       transform: none;
+      overscroll-behavior: none;
+      touch-action: manipulation;
     }
 
     .viewport {
@@ -4621,6 +4624,22 @@
       --scene-scale: 1 !important;
       --scene-stretch-y: 1 !important;
       --scene-shift-y: 0% !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100dvh !important;
+    }
+
+    @supports (height: 100dvh) {
+      html,
+      body,
+      .viewport,
+      .panorama,
+      .panel,
+      .tablet-screen,
+      .main-menu-screen,
+      .intro-sequence-screen {
+        height: 100dvh !important;
+      }
     }
 
     .photo-wrap {
@@ -4630,10 +4649,63 @@
     .photo {
       width: 100% !important;
       height: 100% !important;
-      object-fit: cover !important;
+      object-fit: contain !important;
       object-position: 50% 50% !important;
       transform: none !important;
       transform-origin: 50% 50% !important;
+    }
+
+    @media (orientation: landscape) and (max-width: 1180px) {
+      .night-clock-hud {
+        top: max(12px, env(safe-area-inset-top)) !important;
+        right: max(14px, env(safe-area-inset-right)) !important;
+        transform: scale(0.82) !important;
+        transform-origin: 100% 0 !important;
+      }
+
+      .tablet-toggle {
+        bottom: max(10px, env(safe-area-inset-bottom)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+      }
+
+      .main-menu-screen,
+      .main-menu-layout,
+      .viewport {
+        min-height: 100dvh !important;
+      }
+    }
+
+    @media (orientation: portrait) and (max-width: 1180px) {
+      body::before {
+        content: "请横屏打开";
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+        background: #050505;
+        color: rgba(248, 250, 250, 0.94);
+        font-size: clamp(22px, 7vw, 42px);
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-align: center;
+      }
+
+      body::after {
+        content: "旋转手机或平板后继续";
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: calc(50% + 54px);
+        z-index: 9999;
+        color: rgba(248, 250, 250, 0.66);
+        font-size: clamp(14px, 4vw, 22px);
+        text-align: center;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+      }
     }
 
     .comic-room-mode .door-presence,
