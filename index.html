@@ -4128,6 +4128,8 @@
       border-right: 0;
       box-shadow: none;
       filter: none;
+      transform: translate3d(var(--menu-door-x, 0px), var(--menu-door-y, 0px), 0);
+      transition: transform 620ms steps(2, end), filter 620ms steps(2, end);
       animation: none;
       -webkit-mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
       mask-image: linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.86) 94%, rgba(0, 0, 0, 0) 100%);
@@ -4221,12 +4223,12 @@
 
     .main-menu #character.menu-monster,
     .main-menu .character-ghost {
-      left: max(calc(var(--menu-left-width) - 8px), 37vw);
-      right: -16vw;
-      top: -15vh;
-      bottom: -16vh;
-      background-size: auto 145%;
-      background-position: 56% 43%;
+      left: max(calc(var(--menu-left-width) + 28px), 42.5vw);
+      right: -10vw;
+      top: -10vh;
+      bottom: -11vh;
+      background-size: var(--character-bg-size, auto 132%);
+      background-position: var(--character-bg-x, 57%) var(--character-bg-y, 44%);
     }
 
     .main-menu #character.menu-monster {
@@ -4257,18 +4259,18 @@
 
     .main-menu.environment-glitch .menu-scene-bridge,
     .main-menu.foxy-pressure .menu-scene-bridge {
-      transform: translate3d(0.6px, 0px, 0);
-      animation: menu-right-bg-twitch 150ms steps(2, end) 1, menu-right-bg-breathe 13.5s ease-in-out infinite;
+      transform: translate3d(0.35px, 0px, 0);
+      animation: menu-right-bg-twitch 280ms steps(2, end) 1, menu-right-bg-breathe 13.5s ease-in-out infinite;
     }
 
     .main-menu.environment-glitch .menu-left-panel,
     .main-menu.foxy-pressure .menu-left-panel {
-      animation: menu-left-plate-twitch 150ms steps(2, end) 1;
+      animation: menu-left-plate-twitch 280ms steps(2, end) 1;
     }
 
     .main-menu.environment-glitch #character.menu-monster,
     .main-menu.foxy-pressure #character.menu-monster {
-      animation: menu-character-switch-jitter 150ms steps(2, end) 1;
+      animation: menu-character-switch-jitter 280ms steps(2, end) 1;
     }
 
     @media (max-width: 900px) {
@@ -4299,20 +4301,20 @@
 
     @keyframes menu-right-bg-twitch {
       0% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(0.8px, -0.4px, 0); }
+      50% { transform: translate3d(0.45px, -0.22px, 0); }
       100% { transform: translate3d(0, 0, 0); }
     }
 
     @keyframes menu-left-plate-twitch {
-      0% { background-position: 0 center; filter: brightness(1) contrast(1); }
-      50% { background-position: 1px center; filter: brightness(1.035) contrast(1.025); }
-      100% { background-position: 0 center; filter: brightness(1) contrast(1); }
+      0% { transform: translate3d(var(--menu-door-x, 0px), var(--menu-door-y, 0px), 0); filter: brightness(1) contrast(1); }
+      50% { transform: translate3d(calc(var(--menu-door-x, 0px) + 0.45px), calc(var(--menu-door-y, 0px) - 0.22px), 0); filter: brightness(1.018) contrast(1.012); }
+      100% { transform: translate3d(var(--menu-door-x, 0px), var(--menu-door-y, 0px), 0); filter: brightness(1) contrast(1); }
     }
 
     @keyframes menu-character-switch-jitter {
       0% { transform: translate3d(var(--character-x), var(--character-y), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
-      35% { transform: translate3d(calc(var(--character-x) - 2px), calc(var(--character-y) + 1px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
-      68% { transform: translate3d(calc(var(--character-x) + 2px), calc(var(--character-y) - 1px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
+      35% { transform: translate3d(calc(var(--character-x) - 0.8px), calc(var(--character-y) + 0.45px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
+      68% { transform: translate3d(calc(var(--character-x) + 0.8px), calc(var(--character-y) - 0.45px), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
       100% { transform: translate3d(var(--character-x), var(--character-y), 0) scale(var(--character-scale)) scale(var(--character-pressure)); }
     }
   </style>
@@ -6274,11 +6276,17 @@
 
       if (!body || !menuScreen || !character || !ghost || !edgeGhost || !menuNoise || !menuCrt || !menuFlash || !menuInputLag || !menuUiGlitch || !menuLayout || !wallStainLayer || !wallShadowLayer || !wallHumanLayer || !menuTextEcho) return;
 
+      const referenceCharacterLayout = {
+        bgSize: "auto 132%",
+        bgX: "57%",
+        bgY: "44%",
+      };
+
       const roles = [
-        { key: "freddy", weight: 40, src: "freddy.png" },
-        { key: "bonnie", weight: 25, src: "bonnie.png" },
-        { key: "chica", weight: 20, src: "chica.png" },
-        { key: "foxy", weight: 15, src: "foxy.png" },
+        { key: "freddy", weight: 40, src: "freddy.png", layout: referenceCharacterLayout },
+        { key: "bonnie", weight: 25, src: "bonnie.png", layout: referenceCharacterLayout },
+        { key: "chica", weight: 20, src: "chica.png", layout: referenceCharacterLayout },
+        { key: "foxy", weight: 15, src: "foxy.png", layout: referenceCharacterLayout },
       ];
 
       let currentRole = roles[0];
@@ -6296,6 +6304,12 @@
 
       const roleByKey = (key) => roles.find((role) => role.key === key) || roles[0];
       const cssImage = (role) => `url("${role.src}")`;
+      const applyRoleLayout = (role) => {
+        const layout = role.layout || referenceCharacterLayout;
+        character.style.setProperty("--character-bg-size", layout.bgSize);
+        character.style.setProperty("--character-bg-x", layout.bgX);
+        character.style.setProperty("--character-bg-y", layout.bgY);
+      };
       const isMenuOpen = () => body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open");
       const random = (min, max) => min + (Math.random() * (max - min));
       const chance = (value) => Math.random() < value;
@@ -6360,13 +6374,14 @@
         currentRole = role;
         character.style.setProperty("--character-image", cssImage(role));
         character.dataset.character = role.key;
+        applyRoleLayout(role);
 
         if (!options.skipHistory) {
           history.push(role);
           if (history.length > 12) history = history.slice(history.length - 12);
         }
 
-        character.style.setProperty("--character-pressure", role.key === "foxy" ? "1.03" : "1");
+        character.style.setProperty("--character-pressure", "1");
 
         if (role.key === "foxy") {
           menuScreen.classList.add("foxy-pressure");
@@ -6594,7 +6609,7 @@
             if (mode === "close") character.style.setProperty("--character-pressure", "1.2");
             later(() => {
               character.classList.remove("is-flash");
-              character.style.setProperty("--character-pressure", currentRole.key === "foxy" ? "1.03" : "1");
+              character.style.setProperty("--character-pressure", "1");
             }, random(16, 50));
           }
           scheduleErrorFrame();
@@ -6681,10 +6696,14 @@
         later(() => {
           if (!isMenuOpen()) return;
           if (!watching && !switching) {
-            character.style.setProperty("--character-scale", random(1.045, 1.082).toFixed(4));
-            character.style.setProperty("--character-brightness", random(1.34, 1.58).toFixed(3));
-            character.style.setProperty("--character-x", `${random(-1.6, 1.7).toFixed(2)}px`);
-            character.style.setProperty("--character-y", `${random(-1.2, 1.3).toFixed(2)}px`);
+            const motionX = random(-0.9, 1).toFixed(2);
+            const motionY = random(-0.65, 0.75).toFixed(2);
+            character.style.setProperty("--character-scale", random(1.006, 1.026).toFixed(4));
+            character.style.setProperty("--character-brightness", random(1.28, 1.48).toFixed(3));
+            character.style.setProperty("--character-x", `${motionX}px`);
+            character.style.setProperty("--character-y", `${motionY}px`);
+            menuLayout.style.setProperty("--menu-door-x", `${motionX}px`);
+            menuLayout.style.setProperty("--menu-door-y", `${motionY}px`);
             character.style.setProperty("--character-opacity", random(0.98, 1).toFixed(3));
             if (chance(0.085)) {
               character.classList.add("is-flash");
@@ -6692,7 +6711,7 @@
             }
           }
           scheduleLivingMotion();
-        }, random(70, 260));
+        }, random(520, 1160));
       };
 
       const scheduleNoise = () => {
