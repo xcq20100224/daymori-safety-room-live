@@ -4223,30 +4223,30 @@
 
     .main-menu #character.menu-monster,
     .main-menu .character-ghost {
-      left: max(calc(var(--menu-left-width) + 28px), 42.5vw);
-      right: -10vw;
-      top: -10vh;
-      bottom: -11vh;
-      background-size: var(--character-bg-size, auto 132%);
-      background-position: var(--character-bg-x, 57%) var(--character-bg-y, 44%);
+      left: max(calc(var(--menu-left-width) + 44px), 44.6vw);
+      right: -2vw;
+      top: 0;
+      bottom: 0;
+      background-size: var(--character-bg-size, auto 154%);
+      background-position: var(--character-bg-x, 55%) var(--character-bg-y, 42%);
     }
 
     .main-menu #character.menu-monster {
-      --character-brightness: 1.42;
-      --character-contrast: 1.78;
+      --character-brightness: 1.18;
+      --character-contrast: 1.48;
       filter:
         brightness(var(--character-brightness))
         contrast(var(--character-contrast))
-        saturate(0.92)
-        sepia(0.06)
-        drop-shadow(-18px 0 28px rgba(0, 0, 0, 0.74))
-        drop-shadow(0 0 22px rgba(213, 177, 118, 0.16))
+        saturate(0.84)
+        sepia(0.08)
+        drop-shadow(-16px 0 26px rgba(0, 0, 0, 0.78))
+        drop-shadow(0 0 18px rgba(214, 182, 126, 0.1))
         blur(var(--character-blur));
     }
 
     .main-menu #character.menu-monster.is-watching {
-      --character-brightness: 0.96 !important;
-      --character-contrast: 1.92 !important;
+      --character-brightness: 1.06 !important;
+      --character-contrast: 1.68 !important;
     }
 
     .main-menu .menu-vignette {
@@ -6277,9 +6277,9 @@
       if (!body || !menuScreen || !character || !ghost || !edgeGhost || !menuNoise || !menuCrt || !menuFlash || !menuInputLag || !menuUiGlitch || !menuLayout || !wallStainLayer || !wallShadowLayer || !wallHumanLayer || !menuTextEcho) return;
 
       const referenceCharacterLayout = {
-        bgSize: "auto 132%",
-        bgX: "57%",
-        bgY: "44%",
+        bgSize: "auto 154%",
+        bgX: "55%",
+        bgY: "42%",
       };
 
       const roles = [
@@ -6698,8 +6698,8 @@
           if (!watching && !switching) {
             const motionX = random(-0.9, 1).toFixed(2);
             const motionY = random(-0.65, 0.75).toFixed(2);
-            character.style.setProperty("--character-scale", random(1.006, 1.026).toFixed(4));
-            character.style.setProperty("--character-brightness", random(1.28, 1.48).toFixed(3));
+            character.style.setProperty("--character-scale", random(1.000, 1.008).toFixed(4));
+            character.style.setProperty("--character-brightness", random(1.14, 1.22).toFixed(3));
             character.style.setProperty("--character-x", `${motionX}px`);
             character.style.setProperty("--character-y", `${motionY}px`);
             menuLayout.style.setProperty("--menu-door-x", `${motionX}px`);
