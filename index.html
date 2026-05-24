@@ -749,6 +749,112 @@
       animation-duration: 3.6s;
     }
 
+    .door-stage1-peek {
+      display: none;
+    }
+
+    .freddy-window-figure {
+      position: absolute;
+      left: -298%;
+      top: -7.5%;
+      width: 650%;
+      height: 114%;
+      max-width: none;
+      object-fit: cover;
+      object-position: 55% 47%;
+      display: block;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: brightness(1.08) contrast(1.34) saturate(0.96) sepia(0.06);
+      transform: translate3d(var(--freddy-jitter-x, 0px), var(--freddy-jitter-y, 0px), 0px) scale(1.02);
+      transform-origin: 55% 100%;
+      transition: transform var(--freddy-jitter-dur, 180ms) linear;
+      will-change: transform;
+    }
+
+    .door-presence.stage1-active .freddy-window-figure {
+      opacity: 0.94;
+    }
+
+    .door-presence.stage1-active .door-window-mask {
+      box-shadow: 0 0 0 1px rgba(4, 8, 12, 0.8) inset, 0 0 18px rgba(36, 54, 62, 0.18) inset;
+    }
+
+    .door-stage2-open {
+      left: calc(var(--door-frame-left) - 0.3%);
+      top: calc(var(--door-frame-top) - 0.2%);
+      width: calc(var(--door-frame-width) + 1.7%);
+      height: calc(var(--door-frame-height) + 1.1%);
+      overflow: hidden;
+      clip-path: polygon(2.5% 0%, 100% 0%, 96.5% 100%, 0% 100%);
+      mix-blend-mode: normal;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.38);
+    }
+
+    .door-stage2-open::before {
+      left: 0;
+      top: 0;
+      width: 64%;
+      height: 100%;
+      z-index: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(1, 2, 5, 0.94) 58%, rgba(0, 0, 0, 0.78) 100%),
+        radial-gradient(ellipse at 50% 34%, rgba(88, 97, 105, 0.16) 0%, rgba(0, 0, 0, 0) 60%);
+      clip-path: none;
+      opacity: 1;
+      box-shadow: inset -12px 0 20px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(5, 8, 12, 0.94);
+    }
+
+    .door-stage2-open::after {
+      left: 54%;
+      top: 0;
+      width: 46%;
+      height: 100%;
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(38, 19, 15, 0.92) 0%, rgba(84, 42, 31, 0.78) 43%, rgba(29, 15, 13, 0.9) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 213, 156, 0.04) 0 1px, rgba(0, 0, 0, 0) 1px 9px);
+      transform: skewY(0.4deg);
+      opacity: 0.84;
+      box-shadow: -7px 0 18px rgba(0, 0, 0, 0.62), inset 1px 0 0 rgba(255, 231, 189, 0.06);
+    }
+
+    .door-stage2-open .door-stage2-freddy {
+      position: absolute;
+      left: -6%;
+      top: -5%;
+      width: 73%;
+      height: 108%;
+      max-width: none;
+      object-fit: cover;
+      object-position: 51% 49%;
+      z-index: 1;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: brightness(1.14) contrast(1.24) saturate(0.96) sepia(0.04) drop-shadow(8px 15px 16px rgba(0, 0, 0, 0.62));
+      transform: translate3d(var(--stage2-jitter-x, 0px), var(--stage2-jitter-y, 0px), 0px) rotate(var(--stage2-jitter-tilt, 0deg)) scale(calc(var(--stage2-jitter-scale, 1) * 1.14));
+      transform-origin: 48% 100%;
+      transition: transform var(--stage2-jitter-dur, 180ms) linear;
+      will-change: transform;
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0, 0, 0, 0.35) 93%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0, 0, 0, 0.35) 93%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .stage2-door-overlap {
+      left: 51%;
+      top: 0;
+      width: 8%;
+      height: 100%;
+      z-index: 3;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(1, 1, 2, 0.48) 46%, rgba(0, 0, 0, 0.82) 100%);
+      box-shadow: 3px 0 12px rgba(0, 0, 0, 0.55);
+      opacity: 1;
+    }
+
     .viewport.flashlight-active .photo,
     .viewport.flashlight-active .side-real-photo {
       filter: brightness(0.68) contrast(1.14) saturate(0.78);
@@ -4453,13 +4559,11 @@
           <div class="door-outside-shadow"></div>
           <div class="door-window-mask">
             <div class="door-idle-ambience"></div>
+            <img class="freddy-window-figure" src="freddy.png" alt="" />
             <div class="eye-lock-glow"></div>
           </div>
-          <div class="door-stage1-peek">
-            <img class="freddy-figure door-freddy-model" src="freddy.png" alt="" />
-          </div>
           <div class="door-stage2-open">
-            <img class="door-freddy-model" src="freddy.png" alt="" />
+            <img class="door-stage2-freddy" src="freddy.png" alt="" />
             <div class="stage2-door-overlap" aria-hidden="true"></div>
           </div>
           <div class="stage2-breath-shadow"></div>
@@ -5445,77 +5549,8 @@
       });
     })();
 
-    (function prepareDoorFreddyCutouts() {
-      const targets = Array.from(document.querySelectorAll(".door-freddy-model"));
-      if (!targets.length) return;
-
-      const source = targets[0].getAttribute("src") || "freddy.png";
-      const raw = new Image();
-      raw.src = source;
-
-      const clamp01 = (value) => Math.min(1, Math.max(0, value));
-      const smoothstep = (edge0, edge1, value) => {
-        const t = clamp01((value - edge0) / (edge1 - edge0));
-        return t * t * (3 - 2 * t);
-      };
-      const ellipseMask = (x, y, cx, cy, rx, ry, feather = 0.18) => {
-        const d = (((x - cx) / rx) ** 2) + (((y - cy) / ry) ** 2);
-        return 1 - smoothstep(1, 1 + feather, d);
-      };
-
-      raw.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = raw.naturalWidth;
-        canvas.height = raw.naturalHeight;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) return;
-
-        ctx.drawImage(raw, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const px = imageData.data;
-        const width = canvas.width;
-        const height = canvas.height;
-
-        for (let y = 0; y < height; y += 1) {
-          for (let x = 0; x < width; x += 1) {
-            const i = (y * width + x) * 4;
-            const nx = x / Math.max(1, width - 1);
-            const ny = y / Math.max(1, height - 1);
-            const r = px[i];
-            const g = px[i + 1];
-            const b = px[i + 2];
-            const luminance = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255;
-
-            const head = ellipseMask(nx, ny, 0.505, 0.215, 0.188, 0.17, 0.22);
-            const hat = ellipseMask(nx, ny, 0.505, 0.07, 0.105, 0.075, 0.16);
-            const leftEar = ellipseMask(nx, ny, 0.345, 0.18, 0.072, 0.082, 0.2);
-            const rightEar = ellipseMask(nx, ny, 0.665, 0.18, 0.074, 0.084, 0.2);
-            const torso = ellipseMask(nx, ny, 0.505, 0.56, 0.245, 0.318, 0.24);
-            const leftArm = ellipseMask(nx, ny, 0.272, 0.604, 0.112, 0.278, 0.22);
-            const rightArm = ellipseMask(nx, ny, 0.748, 0.602, 0.118, 0.292, 0.22);
-            const leftLeg = ellipseMask(nx, ny, 0.42, 0.872, 0.106, 0.205, 0.2);
-            const rightLeg = ellipseMask(nx, ny, 0.588, 0.872, 0.108, 0.205, 0.2);
-            const mic = ellipseMask(nx, ny, 0.27, 0.655, 0.075, 0.15, 0.18);
-            const centralDetail = ellipseMask(nx, ny, 0.505, 0.515, 0.31, 0.51, 0.34) * smoothstep(0.035, 0.16, luminance);
-            const silhouette = Math.max(head, hat, leftEar, rightEar, torso, leftArm, rightArm, leftLeg, rightLeg, mic, centralDetail * 0.72);
-            const edgeFade = smoothstep(0.025, 0.11, nx) * (1 - smoothstep(0.89, 0.985, nx)) * smoothstep(0.005, 0.06, ny) * (1 - smoothstep(0.995, 1.0, ny));
-            const alpha = clamp01(silhouette * edgeFade * 1.28);
-
-            px[i + 3] = Math.round(px[i + 3] * alpha);
-          }
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-        const cleanSrc = canvas.toDataURL("image/png");
-        targets.forEach((target) => {
-          target.src = cleanSrc;
-          target.dataset.cutoutReady = "1";
-        });
-      };
-    })();
-
     (function initFreddyUnevenJitter() {
-      const stage1Freddy = document.querySelector(".freddy-figure");
+      const stage1Freddy = document.querySelector(".freddy-window-figure");
       const stage2Freddy = document.querySelector(".door-stage2-open img");
       const stage3Freddy = document.querySelector(".door-stage3-open img");
       const stage3HeadJitter = document.querySelector(".stage3-head-jitter");
