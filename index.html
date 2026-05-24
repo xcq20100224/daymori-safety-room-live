@@ -111,9 +111,9 @@
     .side-real-photo {
       position: absolute;
       inset: 0;
-      background-image: url("assets/safety-room-reference.jpg");
+      background-image: url("assets/safety-room-comic-reference.jpg");
       background-size: cover;
-      filter: brightness(0.56) contrast(1.06) saturate(0.74);
+      filter: brightness(0.92) contrast(1.1) grayscale(1);
       z-index: 1;
       opacity: 0.68;
     }
@@ -279,7 +279,7 @@
       z-index: 4;
       display: grid;
       place-items: center;
-      background: url("assets/safety-room-reference.jpg") center 100% / cover no-repeat;
+      background: #000 url("assets/safety-room-comic-reference.jpg") center center / cover no-repeat;
     }
 
     .photo-wrap::before {
@@ -289,7 +289,8 @@
       z-index: 2;
       pointer-events: none;
       background:
-        radial-gradient(ellipse at 52% 92%, rgba(186, 208, 224, 0.14) 0%, rgba(186, 208, 224, 0.08) 24%, rgba(186, 208, 224, 0) 56%);
+        radial-gradient(ellipse at 28% 7%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0) 42%),
+        radial-gradient(ellipse at 50% 76%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 20%, rgba(255, 255, 255, 0) 48%);
       mix-blend-mode: screen;
     }
 
@@ -302,7 +303,7 @@
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
-      filter: brightness(0.56) contrast(1.08) saturate(0.74);
+      filter: brightness(0.94) contrast(1.18) grayscale(1);
       transform: translateY(var(--scene-shift-y)) scaleY(calc(var(--scene-scale) * var(--scene-stretch-y)));
       transform-origin: 50% 50%;
     }
@@ -314,11 +315,12 @@
       z-index: 3;
       pointer-events: none;
       background:
-        linear-gradient(to bottom, rgba(6, 13, 21, 0.14) 0%, rgba(2, 6, 10, 0.5) 84%, rgba(2, 5, 9, 0.64) 100%),
-        radial-gradient(circle at 50% 34%, rgba(168, 203, 228, 0.11) 0%, rgba(3, 7, 12, 0) 40%);
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.36) 100%),
+        radial-gradient(circle at 52% 46%, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 44%);
     }
 
     .book-privacy-mask {
+      display: none;
       position: absolute;
       left: 49.3%;
       bottom: 16.3%;
@@ -349,6 +351,17 @@
       --door-window-top: 19.1%;
       --door-window-width: 3.14%;
       --door-window-height: 68.1%;
+    }
+
+    .comic-room-mode .door-presence {
+      --door-frame-left: 36.1%;
+      --door-frame-top: 6.2%;
+      --door-frame-width: 10.4%;
+      --door-frame-height: 72.5%;
+      --door-window-left: 39.05%;
+      --door-window-top: 13.5%;
+      --door-window-width: 4.2%;
+      --door-window-height: 56.5%;
     }
 
     .door-outside-shadow {
@@ -4550,9 +4563,9 @@
         <div class="edge-blend"></div>
       </section>
 
-      <section class="panel center-panel" aria-label="中间安全屋">
+      <section class="panel center-panel comic-room-mode" aria-label="中间安全屋">
         <div class="photo-wrap">
-          <img class="photo" src="assets/safety-room-reference.jpg" alt="安全屋场景" />
+          <img class="photo" src="assets/safety-room-comic-reference.jpg" alt="安全屋场景" />
           <div class="book-privacy-mask" aria-hidden="true"></div>
         </div>
         <div class="door-presence" aria-hidden="true">
