@@ -4542,6 +4542,8 @@
       const NIGHT_DURATION_MS = 10 * 60 * 1000;
       const NIGHT_TOTAL_HOURS = 6;
       const NIGHT_ATTACK_COUNT = 5;
+      const FIRST_ATTACK_MIN_MS = 6500;
+      const FIRST_ATTACK_MAX_MS = 9500;
       const STAGE1_DURATION_MIN = 14500;
       const STAGE1_DURATION_MAX = 15500;
       const STAGE2_BREACH_MIN = 7800;
@@ -4743,9 +4745,16 @@
         let previous = 0;
 
         for (let i = 0; i < NIGHT_ATTACK_COUNT; i += 1) {
+          if (i === 0) {
+            const planned = randomBetween(FIRST_ATTACK_MIN_MS, FIRST_ATTACK_MAX_MS);
+            timeline.push(planned);
+            previous = planned;
+            continue;
+          }
+
           const anchor = slotBase * (i + 1);
           const jitter = randomFloat(-slotBase * 0.22, slotBase * 0.22);
-          const minGap = i === 0 ? 35000 : 52000;
+          const minGap = 52000;
           const remaining = NIGHT_ATTACK_COUNT - i - 1;
           const latest = NIGHT_DURATION_MS - ((remaining + 1) * 52000);
 
