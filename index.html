@@ -339,34 +339,33 @@
       content: "";
       position: absolute;
       pointer-events: none;
-      border-radius: 2px;
+      border-radius: 1px;
       background:
-        radial-gradient(ellipse at 50% 42%, rgba(6, 9, 13, 0.2) 0%, rgba(0, 0, 0, 0.28) 38%, rgba(0, 0, 0, 0.76) 100%),
-        repeating-linear-gradient(90deg, rgba(230, 238, 246, 0.055) 0 1px, rgba(0, 0, 0, 0) 1px 8px),
-        repeating-linear-gradient(0deg, rgba(226, 236, 244, 0.05) 0 1px, rgba(0, 0, 0, 0) 1px 13px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.88) 58%, rgba(3, 6, 10, 0.52) 100%);
+        radial-gradient(ellipse at 44% 35%, rgba(18, 22, 27, 0.18) 0%, rgba(0, 0, 0, 0.24) 30%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.96) 100%),
+        radial-gradient(ellipse at 72% 70%, rgba(40, 48, 56, 0.1) 0%, rgba(0, 0, 0, 0.18) 34%, rgba(0, 0, 0, 0) 64%),
+        linear-gradient(104deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.9) 52%, rgba(6, 10, 15, 0.58) 100%);
       mix-blend-mode: multiply;
-      filter: blur(0.48px) contrast(1.14);
-      opacity: 0.96;
-      box-shadow: 0 0 14px rgba(0, 0, 0, 0.82), 0 0 0 1px rgba(0, 0, 0, 0.42) inset;
+      filter: blur(0.28px) contrast(1.08);
+      opacity: 0.94;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(0, 0, 0, 0.22) inset;
     }
 
     .vent-shadow-layer::before {
-      left: 18.2%;
-      top: 60.2%;
-      width: 7.4%;
-      height: 17.8%;
-      clip-path: polygon(7% 6%, 100% 0%, 90% 100%, 0% 92%);
-      transform: skewY(-2deg);
+      left: 19.3%;
+      top: 58.7%;
+      width: 10.1%;
+      height: 24.6%;
+      clip-path: polygon(3% 1%, 84% 0%, 58% 100%, 0% 96%);
+      transform: skewY(-1deg);
     }
 
     .vent-shadow-layer::after {
-      left: 76.9%;
-      top: 59%;
-      width: 6.3%;
-      height: 13.8%;
-      clip-path: polygon(4% 3%, 100% 8%, 95% 96%, 0% 100%);
-      transform: skewY(1.5deg);
+      left: 82.1%;
+      top: 53.8%;
+      width: 7.2%;
+      height: 21.6%;
+      clip-path: polygon(12% 0%, 100% 4%, 96% 100%, 0% 92%);
+      transform: skewY(1deg);
     }
 
     .viewport.flashlight-active .vent-shadow-layer {
@@ -5166,7 +5165,7 @@
       const FLASHLIGHT_RECOVER_MS = 210;
       const FLASHLIGHT_HIT_CLASS_MS = 170;
       const FLASHLIGHT_VISUAL_PROFILE = "fnaf4-cold-white-v1";
-      const VENT_SHADOW_PROFILE = "flashlight-revealed-side-vents-mobile-v5";
+      const VENT_SHADOW_PROFILE = "flashlight-revealed-vent-depth-v6";
 
       let stage2Timer = null;
       let flashlightPulseTimer = null;
