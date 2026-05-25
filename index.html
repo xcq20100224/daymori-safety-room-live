@@ -7423,7 +7423,7 @@
         if (!tabletAudioCtx) {
           tabletAudioCtx = new AudioContextCtor();
           tabletAudioMaster = tabletAudioCtx.createGain();
-          tabletAudioMaster.gain.value = 0.22;
+          tabletAudioMaster.gain.value = 0.29;
           tabletAudioMaster.connect(tabletAudioCtx.destination);
         }
         if (tabletAudioCtx.state === "suspended") {
@@ -7438,7 +7438,7 @@
         const buffer = tabletAudioCtx.createBuffer(1, frameCount, sampleRate);
         const data = buffer.getChannelData(0);
         for (let index = 0; index < frameCount; index += 1) {
-          data[index] = (Math.random() * 2 - 1) * 0.26;
+          data[index] = (Math.random() * 2 - 1) * 0.32;
         }
         return buffer;
       };
@@ -7460,7 +7460,7 @@
         slideFilter.frequency.linearRampToValueAtTime(isOpen ? 1180 : 260, now + duration);
         slideFilter.Q.value = 0.22;
         slideGain.gain.setValueAtTime(0.0001, now);
-        slideGain.gain.linearRampToValueAtTime(isOpen ? 0.046 : 0.052, now + 0.045);
+        slideGain.gain.linearRampToValueAtTime(isOpen ? 0.074 : 0.082, now + 0.045);
         slideGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
         slideNoise.connect(slideFilter).connect(slideGain).connect(tabletAudioMaster);
         slideNoise.start(now);
@@ -7477,7 +7477,7 @@
         airSweep.frequency.setValueAtTime(isOpen ? 118 : 152, now);
         airSweep.frequency.exponentialRampToValueAtTime(isOpen ? 214 : 72, now + duration * 0.72);
         airGain.gain.setValueAtTime(0.0001, now);
-        airGain.gain.linearRampToValueAtTime(isOpen ? 0.048 : 0.056, now + 0.028);
+        airGain.gain.linearRampToValueAtTime(isOpen ? 0.066 : 0.074, now + 0.028);
         airGain.gain.exponentialRampToValueAtTime(0.0001, now + duration * 0.86);
         airSweep.connect(airFilter).connect(airGain).connect(tabletAudioMaster);
         airSweep.start(now);
@@ -7489,7 +7489,7 @@
         softLatch.frequency.setValueAtTime(isOpen ? 78 : 96, now + (isOpen ? 0.012 : 0.18));
         softLatch.frequency.exponentialRampToValueAtTime(isOpen ? 116 : 54, now + (isOpen ? 0.16 : 0.34));
         latchGain.gain.setValueAtTime(0.0001, now);
-        latchGain.gain.linearRampToValueAtTime(isOpen ? 0.032 : 0.038, now + (isOpen ? 0.032 : 0.205));
+        latchGain.gain.linearRampToValueAtTime(isOpen ? 0.054 : 0.064, now + (isOpen ? 0.032 : 0.205));
         latchGain.gain.exponentialRampToValueAtTime(0.0001, now + (isOpen ? 0.22 : 0.42));
         softLatch.connect(latchGain).connect(tabletAudioMaster);
         softLatch.start(now);
