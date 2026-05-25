@@ -352,21 +352,21 @@
     }
 
     .vent-shadow-layer::before {
-      left: 14.8%;
-      top: 51.6%;
-      width: 9.4%;
-      height: 18.2%;
-      clip-path: polygon(8% 7%, 100% 0%, 91% 100%, 0% 88%);
-      transform: skewY(-1.5deg);
+      left: 18.2%;
+      top: 60.2%;
+      width: 7.4%;
+      height: 17.8%;
+      clip-path: polygon(7% 6%, 100% 0%, 90% 100%, 0% 92%);
+      transform: skewY(-2deg);
     }
 
     .vent-shadow-layer::after {
-      left: 76.7%;
-      top: 50.4%;
-      width: 10.2%;
-      height: 17.4%;
-      clip-path: polygon(4% 2%, 100% 8%, 95% 96%, 0% 100%);
-      transform: skewY(1deg);
+      left: 76.9%;
+      top: 59%;
+      width: 6.3%;
+      height: 13.8%;
+      clip-path: polygon(4% 3%, 100% 8%, 95% 96%, 0% 100%);
+      transform: skewY(1.5deg);
     }
 
     .viewport.flashlight-active .vent-shadow-layer {
@@ -5166,7 +5166,7 @@
       const FLASHLIGHT_RECOVER_MS = 210;
       const FLASHLIGHT_HIT_CLASS_MS = 170;
       const FLASHLIGHT_VISUAL_PROFILE = "fnaf4-cold-white-v1";
-      const VENT_SHADOW_PROFILE = "flashlight-revealed-side-vents-v4";
+      const VENT_SHADOW_PROFILE = "flashlight-revealed-side-vents-mobile-v5";
 
       let stage2Timer = null;
       let flashlightPulseTimer = null;
@@ -5459,6 +5459,37 @@
         updateNightDebug();
       };
 
+      let lastPointerFlashAt = 0;
+
+      const getFlashlightPoint = (event) => {
+        if (event.changedTouches && event.changedTouches.length) return event.changedTouches[0];
+        if (event.touches && event.touches.length) return event.touches[0];
+        return event;
+      };
+
+      const shouldIgnoreFlashlightTarget = (target) => {
+        if (!target || typeof target.closest !== "function") return false;
+        return Boolean(target.closest("button, a, input, textarea, select, [role='button'], .main-menu-screen, .intro-sequence-screen"));
+      };
+
+      const onFlashlightInput = (event) => {
+        if (event.type === "pointerdown") {
+          if (event.button !== 0 || event.isPrimary === false) return;
+          lastPointerFlashAt = Date.now();
+        } else if (event.type === "click" && Date.now() - lastPointerFlashAt < 520) {
+          return;
+        } else if (event.type === "touchstart") {
+          lastPointerFlashAt = Date.now();
+        }
+
+        if (shouldIgnoreFlashlightTarget(event.target)) return;
+
+        const point = getFlashlightPoint(event);
+        if (!point || typeof point.clientX !== "number" || typeof point.clientY !== "number") return;
+
+        onFlashlightClick(point);
+      };
+
       const advanceNightLoop = () => {
         const now = performance.now();
         if (!canRunNight()) {
@@ -5505,7 +5536,11 @@
         }, 200);
       };
 
-      window.addEventListener("click", onFlashlightClick);
+      window.addEventListener("pointerdown", onFlashlightInput, { passive: true });
+      window.addEventListener("click", onFlashlightInput);
+      if (!window.PointerEvent) {
+        window.addEventListener("touchstart", onFlashlightInput, { passive: true });
+      }
 
       setDoorStage(0);
       syncNightReadout();
@@ -5520,7 +5555,11 @@
         clearStageTimers();
         clearFlashlightTimers();
         clearMonitorFlash();
-        window.removeEventListener("click", onFlashlightClick);
+        window.removeEventListener("pointerdown", onFlashlightInput);
+        window.removeEventListener("click", onFlashlightInput);
+        if (!window.PointerEvent) {
+          window.removeEventListener("touchstart", onFlashlightInput);
+        }
       });
     })();
 
