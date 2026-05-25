@@ -341,31 +341,32 @@
       pointer-events: none;
       border-radius: 1px;
       background:
-        radial-gradient(ellipse at 44% 35%, rgba(18, 22, 27, 0.18) 0%, rgba(0, 0, 0, 0.24) 30%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.96) 100%),
-        radial-gradient(ellipse at 72% 70%, rgba(40, 48, 56, 0.1) 0%, rgba(0, 0, 0, 0.18) 34%, rgba(0, 0, 0, 0) 64%),
-        linear-gradient(104deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.9) 52%, rgba(6, 10, 15, 0.58) 100%);
+        radial-gradient(ellipse at 48% 52%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.9) 45%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0.1) 100%),
+        linear-gradient(102deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.68) 55%, rgba(0, 0, 0, 0.18) 100%);
       mix-blend-mode: multiply;
-      filter: blur(0.28px) contrast(1.08);
-      opacity: 0.94;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(0, 0, 0, 0.22) inset;
+      filter: blur(0.16px) contrast(1.04);
+      opacity: 0.9;
+      box-shadow: none;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 54%, #000 0 56%, rgba(0, 0, 0, 0.72) 70%, rgba(0, 0, 0, 0.25) 84%, transparent 100%);
+      mask-image: radial-gradient(ellipse at 50% 54%, #000 0 56%, rgba(0, 0, 0, 0.72) 70%, rgba(0, 0, 0, 0.25) 84%, transparent 100%);
     }
 
     .vent-shadow-layer::before {
-      left: 19.3%;
-      top: 58.7%;
-      width: 10.1%;
-      height: 24.6%;
-      clip-path: polygon(3% 1%, 84% 0%, 58% 100%, 0% 96%);
-      transform: skewY(-1deg);
+      left: 18.9%;
+      top: 61.1%;
+      width: 9.1%;
+      height: 21.4%;
+      clip-path: polygon(16% 8%, 94% 0%, 82% 89%, 4% 100%, 0% 24%);
+      transform: skewY(-2deg) rotate(-0.4deg);
     }
 
     .vent-shadow-layer::after {
-      left: 82.1%;
-      top: 53.8%;
-      width: 7.2%;
-      height: 21.6%;
-      clip-path: polygon(12% 0%, 100% 4%, 96% 100%, 0% 92%);
-      transform: skewY(1deg);
+      left: 87.1%;
+      top: 55.8%;
+      width: 5.8%;
+      height: 19.8%;
+      clip-path: polygon(8% 5%, 96% 0%, 100% 92%, 14% 100%, 0% 30%);
+      transform: skewY(1.1deg) rotate(0.2deg);
     }
 
     .viewport.flashlight-active .vent-shadow-layer {
@@ -5165,7 +5166,7 @@
       const FLASHLIGHT_RECOVER_MS = 210;
       const FLASHLIGHT_HIT_CLASS_MS = 170;
       const FLASHLIGHT_VISUAL_PROFILE = "fnaf4-cold-white-v1";
-      const VENT_SHADOW_PROFILE = "flashlight-revealed-vent-depth-v6";
+      const VENT_SHADOW_PROFILE = "flashlight-revealed-vent-mouth-inner-v7";
 
       let stage2Timer = null;
       let flashlightPulseTimer = null;
