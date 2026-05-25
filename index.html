@@ -322,54 +322,54 @@
         radial-gradient(circle at 52% 46%, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 44%);
     }
 
-    .pipe-shadow-layer {
+    .vent-shadow-layer {
       position: absolute;
       inset: 0;
       z-index: 4;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 17% 36% at 31% 47%, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.86) 34%, rgba(2, 5, 9, 0.52) 58%, rgba(4, 8, 13, 0.16) 78%, rgba(4, 8, 13, 0) 100%),
-        radial-gradient(ellipse 12% 30% at 35% 51%, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.38) 48%, rgba(0, 0, 0, 0) 100%),
-        radial-gradient(ellipse 18% 38% at 77% 48%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.88) 35%, rgba(2, 5, 9, 0.56) 60%, rgba(4, 8, 13, 0.18) 80%, rgba(4, 8, 13, 0) 100%),
-        radial-gradient(ellipse 13% 32% at 73% 51%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.36) 48%, rgba(0, 0, 0, 0) 100%),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 17%, rgba(0, 0, 0, 0) 83%, rgba(0, 0, 0, 0.32) 100%);
+        radial-gradient(ellipse 9% 31% at 7.4% 48%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.9) 38%, rgba(2, 5, 9, 0.58) 62%, rgba(4, 8, 13, 0.16) 83%, rgba(4, 8, 13, 0) 100%),
+        radial-gradient(ellipse 10% 32% at 93.1% 49%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.9) 38%, rgba(2, 5, 9, 0.56) 62%, rgba(4, 8, 13, 0.16) 84%, rgba(4, 8, 13, 0) 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.18) 12%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 76%, rgba(0, 0, 0, 0.2) 88%, rgba(0, 0, 0, 0.5) 100%);
       mix-blend-mode: multiply;
-      opacity: 0.86;
-      filter: blur(0.4px) contrast(1.08);
+      opacity: 0.9;
+      filter: blur(0.35px) contrast(1.08);
       transition: opacity 120ms linear, filter 120ms linear;
     }
 
-    .pipe-shadow-layer::before,
-    .pipe-shadow-layer::after {
+    .vent-shadow-layer::before,
+    .vent-shadow-layer::after {
       content: "";
       position: absolute;
-      top: 19%;
-      width: 16%;
-      height: 60%;
+      top: 27%;
+      width: 7.8%;
+      height: 46%;
       pointer-events: none;
-      border-radius: 50%;
+      border-radius: 3px;
       background:
-        radial-gradient(ellipse at 50% 48%, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.2) 46%, rgba(0, 0, 0, 0) 72%),
-        linear-gradient(90deg, rgba(225, 235, 244, 0.035), rgba(0, 0, 0, 0.12) 40%, rgba(0, 0, 0, 0.34));
+        linear-gradient(90deg, rgba(0, 0, 0, 0.94), rgba(0, 0, 0, 0.78) 42%, rgba(12, 18, 24, 0.28) 100%),
+        repeating-linear-gradient(90deg, rgba(220, 232, 242, 0.1) 0 1px, rgba(0, 0, 0, 0) 1px 9px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, rgba(0, 0, 0, 0) 1px 14px);
       mix-blend-mode: multiply;
-      filter: blur(1.2px);
-      opacity: 0.72;
+      filter: blur(0.65px) contrast(1.16);
+      opacity: 0.78;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.74), 0 0 0 1px rgba(0, 0, 0, 0.34) inset;
     }
 
-    .pipe-shadow-layer::before {
-      left: 23.5%;
-      transform: rotate(-2deg);
+    .vent-shadow-layer::before {
+      left: 3.6%;
+      transform: skewY(-1deg);
     }
 
-    .pipe-shadow-layer::after {
-      right: 15.8%;
-      transform: rotate(2deg) scaleX(1.08);
+    .vent-shadow-layer::after {
+      right: 3.1%;
+      transform: skewY(1.5deg);
     }
 
-    .viewport.flashlight-active .pipe-shadow-layer {
+    .viewport.flashlight-active .vent-shadow-layer {
       -webkit-mask-image: radial-gradient(circle at var(--flash-x) var(--flash-y), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 16%, rgba(0, 0, 0, 0.72) 28%, #000 42%);
       mask-image: radial-gradient(circle at var(--flash-x) var(--flash-y), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 16%, rgba(0, 0, 0, 0.72) 28%, #000 42%);
-      opacity: 0.78;
+      opacity: 0.8;
       filter: blur(0.25px) contrast(1.04);
     }
 
@@ -5017,7 +5017,7 @@
             <source media="(pointer: coarse), (max-width: 1180px)" srcset="assets/safety-room-mobile.jpg" />
             <img class="photo" src="assets/safety-room-comic-reference.jpg" alt="安全屋场景" />
           </picture>
-          <div class="pipe-shadow-layer" aria-hidden="true"></div>
+          <div class="vent-shadow-layer" aria-hidden="true"></div>
           <div class="book-privacy-mask" aria-hidden="true"></div>
         </div>
         <div class="door-presence" aria-hidden="true">
