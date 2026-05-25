@@ -2678,13 +2678,27 @@
       pointer-events: auto;
     }
 
+    body.tablet-closing .tablet-screen {
+      opacity: 1;
+      pointer-events: none;
+    }
+
     body.tablet-open .tablet-panel {
       transform: translateY(0) rotateX(0deg) scale(1);
       filter: blur(0px) brightness(1);
+      transition: transform 520ms cubic-bezier(0.14, 0.92, 0.18, 1), filter 520ms cubic-bezier(0.14, 0.92, 0.18, 1);
+    }
+
+    body.tablet-closing .tablet-panel {
+      transform: translateY(116%) rotateX(-74deg) scale(1.018);
+      filter: blur(1.25px) brightness(0.58);
+      transition: transform 620ms cubic-bezier(0.38, 0, 0.66, 0.18), filter 620ms cubic-bezier(0.38, 0, 0.66, 0.18);
     }
 
     body.tablet-open .viewport,
-    body.tablet-open .tablet-toggle {
+    body.tablet-open .tablet-toggle,
+    body.tablet-closing .viewport,
+    body.tablet-closing .tablet-toggle {
       filter: brightness(0.68) contrast(0.94);
     }
 
@@ -7359,6 +7373,11 @@
       let tabletOpen = false;
       let currentRoom = "classroom-b";
       let signalCutTimer = null;
+      let closeAnimationTimer = null;
+      let tabletAudioCtx = null;
+      let tabletAudioMaster = null;
+
+      const TABLET_CLOSE_ANIMATION_MS = 640;
 
       const roomMeta = {
         "classroom-b": {
@@ -7398,19 +7417,97 @@
         return !body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open");
       };
 
+      const ensureTabletAudio = () => {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return;
+        if (!tabletAudioCtx) {
+          tabletAudioCtx = new AudioContextCtor();
+          tabletAudioMaster = tabletAudioCtx.createGain();
+          tabletAudioMaster.gain.value = 0.34;
+          tabletAudioMaster.connect(tabletAudioCtx.destination);
+        }
+        if (tabletAudioCtx.state === "suspended") {
+          void tabletAudioCtx.resume().catch(() => {
+          });
+        }
+      };
+
+      const createTabletNoiseBuffer = (durationSec) => {
+        const sampleRate = tabletAudioCtx.sampleRate;
+        const frameCount = Math.max(1, Math.floor(sampleRate * durationSec));
+        const buffer = tabletAudioCtx.createBuffer(1, frameCount, sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let index = 0; index < frameCount; index += 1) {
+          data[index] = (Math.random() * 2 - 1) * 0.72;
+        }
+        return buffer;
+      };
+
+      const playTabletFlipSound = (direction) => {
+        ensureTabletAudio();
+        if (!tabletAudioCtx || !tabletAudioMaster) return;
+
+        const now = tabletAudioCtx.currentTime;
+        const isOpen = direction === "open";
+        const duration = isOpen ? 0.34 : 0.54;
+
+        const noise = tabletAudioCtx.createBufferSource();
+        const filter = tabletAudioCtx.createBiquadFilter();
+        const noiseGain = tabletAudioCtx.createGain();
+        noise.buffer = createTabletNoiseBuffer(duration + 0.05);
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(isOpen ? 360 : 520, now);
+        filter.frequency.exponentialRampToValueAtTime(isOpen ? 1220 : 180, now + duration);
+        filter.Q.value = isOpen ? 0.82 : 0.68;
+        noiseGain.gain.setValueAtTime(0.0001, now);
+        noiseGain.gain.exponentialRampToValueAtTime(isOpen ? 0.24 : 0.2, now + 0.018);
+        noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        noise.connect(filter).connect(noiseGain).connect(tabletAudioMaster);
+        noise.start(now);
+        noise.stop(now + duration + 0.08);
+
+        const thunk = tabletAudioCtx.createOscillator();
+        const thunkGain = tabletAudioCtx.createGain();
+        thunk.type = isOpen ? "triangle" : "sine";
+        thunk.frequency.setValueAtTime(isOpen ? 94 : 132, now);
+        thunk.frequency.exponentialRampToValueAtTime(isOpen ? 168 : 58, now + (isOpen ? 0.12 : 0.2));
+        thunkGain.gain.setValueAtTime(0.0001, now);
+        thunkGain.gain.exponentialRampToValueAtTime(isOpen ? 0.15 : 0.2, now + 0.012);
+        thunkGain.gain.exponentialRampToValueAtTime(0.0001, now + (isOpen ? 0.16 : 0.26));
+        thunk.connect(thunkGain).connect(tabletAudioMaster);
+        thunk.start(now);
+        thunk.stop(now + (isOpen ? 0.2 : 0.3));
+      };
+
       const openTablet = () => {
         if (tabletOpen || !canOpenTablet()) return;
+        if (closeAnimationTimer) {
+          window.clearTimeout(closeAnimationTimer);
+          closeAnimationTimer = null;
+        }
         tabletOpen = true;
+        body.classList.remove("tablet-closing");
         body.classList.add("tablet-open");
         tabletScreen.setAttribute("aria-hidden", "false");
+        playTabletFlipSound("open");
         triggerSignalCut();
       };
 
       const closeTablet = () => {
         if (!tabletOpen) return;
         tabletOpen = false;
+        if (closeAnimationTimer) {
+          window.clearTimeout(closeAnimationTimer);
+          closeAnimationTimer = null;
+        }
+        playTabletFlipSound("close");
         body.classList.remove("tablet-open");
-        tabletScreen.setAttribute("aria-hidden", "true");
+        body.classList.add("tablet-closing");
+        closeAnimationTimer = window.setTimeout(() => {
+          body.classList.remove("tablet-closing");
+          tabletScreen.setAttribute("aria-hidden", "true");
+          closeAnimationTimer = null;
+        }, TABLET_CLOSE_ANIMATION_MS);
       };
 
       toggleBtn.addEventListener("click", (event) => {
@@ -7455,7 +7552,18 @@
           window.clearTimeout(signalCutTimer);
           signalCutTimer = null;
         }
-        closeTablet();
+        if (closeAnimationTimer) {
+          window.clearTimeout(closeAnimationTimer);
+          closeAnimationTimer = null;
+        }
+        tabletOpen = false;
+        body.classList.remove("tablet-open");
+        body.classList.remove("tablet-closing");
+        tabletScreen.setAttribute("aria-hidden", "true");
+        if (tabletAudioCtx) {
+          void tabletAudioCtx.close().catch(() => {
+          });
+        }
       });
 
       syncRoom(currentRoom);
