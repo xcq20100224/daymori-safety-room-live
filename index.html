@@ -7815,6 +7815,114 @@
         height: clamp(224px, 26vh, 280px) !important;
       }
     }
+
+    @media (orientation: landscape) and (max-width: 1180px) and (pointer: coarse),
+      (orientation: landscape) and (max-width: 900px) and (max-height: 520px) {
+      .tablet-panel,
+      .tablet-monitor,
+      .camera-feed {
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+      }
+
+      .tablet-header {
+        min-height: clamp(42px, 10vh, 54px) !important;
+        padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left)) !important;
+      }
+
+      .camera-hud-left {
+        gap: clamp(7px, 1.4vw, 12px) !important;
+      }
+
+      .camera-battery-label {
+        font-size: clamp(8px, 1.1vw, 11px) !important;
+      }
+
+      .camera-battery-shell {
+        height: clamp(17px, 3.4vh, 24px) !important;
+        padding: 2px 4px !important;
+        gap: 2px !important;
+      }
+
+      .camera-mute-call {
+        min-height: clamp(26px, 5.6vh, 34px) !important;
+        padding: 0 clamp(8px, 1.8vw, 13px) !important;
+        font-size: clamp(9px, 1.3vw, 12px) !important;
+      }
+
+      .camera-night-readout {
+        min-width: clamp(68px, 12vw, 92px) !important;
+      }
+
+      .camera-night-readout span {
+        font-size: clamp(10px, 1.35vw, 13px) !important;
+      }
+
+      .camera-night-readout strong {
+        font-size: clamp(19px, 3.5vw, 28px) !important;
+      }
+
+      .map-mode-toggle {
+        top: max(66px, calc(env(safe-area-inset-top) + 56px)) !important;
+        right: max(10px, env(safe-area-inset-right)) !important;
+        min-height: clamp(24px, 5.8vh, 31px) !important;
+        padding: 0 clamp(8px, 1.7vw, 12px) !important;
+        font-size: clamp(8px, 1.2vw, 11px) !important;
+      }
+
+      .tablet-map {
+        right: max(10px, env(safe-area-inset-right)) !important;
+        bottom: max(18px, env(safe-area-inset-bottom)) !important;
+        width: clamp(320px, 38vw, 430px) !important;
+        min-width: 0 !important;
+        opacity: 0.84 !important;
+      }
+
+      .tablet-map-head {
+        margin-bottom: 3px !important;
+      }
+
+      .tablet-map-title {
+        font-size: clamp(8px, 1.1vw, 11px) !important;
+      }
+
+      .tablet-map-subtitle {
+        display: none !important;
+      }
+
+      .tablet-map-grid {
+        height: clamp(148px, 34vh, 238px) !important;
+      }
+
+      .map-topology-lines {
+        inset: 2% 1% 1% 1% !important;
+      }
+
+      .map-topology-lines path {
+        stroke-width: 1.05 !important;
+      }
+
+      .map-room {
+        width: clamp(30px, 3.8vw, 42px) !important;
+        height: clamp(15px, 2.4vw, 22px) !important;
+        padding: 0 2px !important;
+        border-width: 1.5px !important;
+        font-size: clamp(5px, 0.72vw, 8px) !important;
+        line-height: 1 !important;
+      }
+
+      .map-room.cam-block {
+        width: clamp(23px, 2.9vw, 32px) !important;
+        height: clamp(13px, 1.9vw, 18px) !important;
+        font-size: clamp(5px, 0.62vw, 7px) !important;
+      }
+
+      .map-room.is-you {
+        width: clamp(43px, 5.4vw, 62px) !important;
+        height: clamp(17px, 2.6vw, 24px) !important;
+      }
+    }
   </style>
 </head>
 <body class="main-menu-open">
