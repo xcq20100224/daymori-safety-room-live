@@ -6386,7 +6386,7 @@
     }
 
     .classroom-b-scene {
-      --monitor-room-image: url("room3-monitor.png");
+      --monitor-room-image: none;
       background-image:
         linear-gradient(to bottom, rgba(255, 255, 255, 0.035), rgba(0, 0, 0, 0.08)),
         var(--monitor-room-image) !important;
@@ -7923,6 +7923,17 @@
         height: clamp(17px, 2.6vw, 24px) !important;
       }
     }
+
+    @media (pointer: coarse), (max-width: 1180px) {
+      .main-menu .menu-background {
+        background-image: url("menu-main-exact-mobile.jpg") !important;
+      }
+
+      .main-menu .menu-left-panel,
+      .main-menu .menu-left-panel::before {
+        background-image: url("menu-main-exact-mobile.jpg") !important;
+      }
+    }
   </style>
 </head>
 <body class="main-menu-open">
@@ -8011,16 +8022,16 @@
             <div class="door-idle-ambience"></div>
           </div>
           <div class="door-stage1-open">
-            <img class="door-stage1-freddy" src="assets/freddy-user-stage1.jpg" data-fallback-src="assets/freddy-user-stage1.jpg" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-head" src="assets/freddy-user-stage1.jpg" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-arm-left" src="assets/freddy-user-stage1.jpg" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-arm-right" src="assets/freddy-user-stage1.jpg" alt="" />
+            <img class="door-stage1-freddy" data-src="assets/freddy-user-stage1.jpg" data-fallback-src="assets/freddy-user-stage1.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-head" data-src="assets/freddy-user-stage1.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-arm-left" data-src="assets/freddy-user-stage1.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-arm-right" data-src="assets/freddy-user-stage1.jpg" alt="" decoding="async" />
           </div>
           <div class="door-stage2-open">
-            <img class="door-stage2-freddy" src="assets/freddy-safe-room-stage1.png" data-fallback-src="assets/freddy-user-stage2.jpg" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-head" src="assets/freddy-safe-room-stage1.png" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-arm-left" src="assets/freddy-safe-room-stage1.png" alt="" />
-            <img class="freddy-jitter-part freddy-jitter-arm-right" src="assets/freddy-safe-room-stage1.png" alt="" />
+            <img class="door-stage2-freddy" data-src="assets/freddy-safe-room-stage1.png" data-mobile-src="assets/freddy-safe-room-stage1-mobile.jpg" data-fallback-src="assets/freddy-user-stage2.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-head" data-src="assets/freddy-safe-room-stage1.png" data-mobile-src="assets/freddy-safe-room-stage1-mobile.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-arm-left" data-src="assets/freddy-safe-room-stage1.png" data-mobile-src="assets/freddy-safe-room-stage1-mobile.jpg" alt="" decoding="async" />
+            <img class="freddy-jitter-part freddy-jitter-arm-right" data-src="assets/freddy-safe-room-stage1.png" data-mobile-src="assets/freddy-safe-room-stage1-mobile.jpg" alt="" decoding="async" />
             <div class="stage2-door-overlap" aria-hidden="true"></div>
           </div>
           <div class="stage2-breath-shadow"></div>
@@ -8245,7 +8256,7 @@
         freddyJumpscareLayer.id = "freddyJumpscareLayer";
         freddyJumpscareLayer.className = "freddy-jumpscare-layer";
         freddyJumpscareLayer.setAttribute("aria-hidden", "true");
-        freddyJumpscareLayer.innerHTML = '<img class="freddy-jumpscare-figure" src="assets/freddy-jumpscare-closeup.png" data-fallback-src="assets/freddy-door-open-stage3.jpeg" alt="" /><span class="freddy-jumpscare-mouth" aria-hidden="true"></span><span class="freddy-jumpscare-gameover">You have been dismembered.</span>';
+        freddyJumpscareLayer.innerHTML = '<img class="freddy-jumpscare-figure" data-src="assets/freddy-jumpscare-closeup.png" data-mobile-src="assets/freddy-jumpscare-closeup-mobile.jpg" data-fallback-src="assets/freddy-door-open-stage3.jpeg" alt="" decoding="async" /><span class="freddy-jumpscare-mouth" aria-hidden="true"></span><span class="freddy-jumpscare-gameover">You have been dismembered.</span>';
         body.appendChild(freddyJumpscareLayer);
       }
 
@@ -8260,6 +8271,28 @@
       }
 
       const freddyJumpscareFigure = freddyJumpscareLayer.querySelector(".freddy-jumpscare-figure");
+      const isMobileAssetMode = () => {
+        if (window.matchMedia) {
+          return window.matchMedia("(pointer: coarse), (max-width: 1180px)").matches;
+        }
+        return window.innerWidth <= 1180;
+      };
+      const resolveDeferredImageSrc = (img) => {
+        if (!img) return "";
+        if (isMobileAssetMode()) {
+          return img.dataset.mobileSrc || img.dataset.src || img.getAttribute("src") || "";
+        }
+        return img.dataset.src || img.getAttribute("src") || "";
+      };
+      const hydrateDeferredImage = (img) => {
+        if (!img || img.getAttribute("src")) return;
+        const source = resolveDeferredImageSrc(img);
+        if (source) img.setAttribute("src", source);
+      };
+      const hydrateDoorStageImages = (stage) => {
+        const selector = stage === 1 ? ".door-stage1-open img" : ".door-stage2-open img";
+        Array.from(doorPresence.querySelectorAll(selector)).forEach(hydrateDeferredImage);
+      };
       if (freddyJumpscareFigure) {
         freddyJumpscareFigure.addEventListener("error", () => {
           const fallback = freddyJumpscareFigure.getAttribute("data-fallback-src") || "";
@@ -8707,6 +8740,7 @@
       const triggerFreddyJumpscare = () => {
         if (jumpscareActive || gameOverActive) return;
 
+        hydrateDeferredImage(freddyJumpscareFigure);
         jumpscareActive = true;
         gameOverActive = false;
         nightCleared = true;
@@ -8848,6 +8882,9 @@
 
       const setDoorStage = (stage) => {
         const nextStage = stage === 1 || stage === 2 ? stage : 0;
+        if (nextStage) {
+          hydrateDoorStageImages(nextStage);
+        }
         doorStageClosing = false;
         if (freddyBlackoutTimer) {
           window.clearTimeout(freddyBlackoutTimer);
@@ -9858,12 +9895,18 @@
       if (!body || !menuScreen || !startBtn || !continueBtn || !imageEl || !frameEl || !labelEl) return;
       const hasIntroSequence = Boolean(introScreen && introLine);
       const hasNightSplit = Boolean(introNightSplit && introNightHalfTop && introNightHalfBottom);
+      const isMobileAssetMode = () => {
+        if (window.matchMedia) {
+          return window.matchMedia("(pointer: coarse), (max-width: 1180px)").matches;
+        }
+        return window.innerWidth <= 1180;
+      };
 
       const roster = [
-        { name: "Freddy", src: "menu-animatronics-latest.png", posX: "55%", posY: "4%", scale: "1.36", offsetY: "36px", cutout: true, darkCutout: true, crop: { x: 0, y: 0, w: 0.5, h: 0.5, inset: 0.02 } },
-        { name: "Bonnie", src: "menu-animatronics-latest.png", posX: "54%", posY: "3%", scale: "1.46", offsetY: "40px", cutout: true, darkCutout: true, crop: { x: 0.5, y: 0, w: 0.5, h: 0.5, inset: 0.02 } },
-        { name: "Chica", src: "menu-animatronics-latest.png", posX: "54%", posY: "3%", scale: "1.44", offsetY: "40px", cutout: true, darkCutout: true, crop: { x: 0, y: 0.5, w: 0.5, h: 0.5, inset: 0.02 } },
-        { name: "Foxy", src: "menu-animatronics-latest.png", posX: "55%", posY: "3%", scale: "1.48", offsetY: "42px", cutout: true, darkCutout: true, crop: { x: 0.5, y: 0.5, w: 0.5, h: 0.5, inset: 0.02 } },
+        { name: "Freddy", src: "menu-animatronics-latest.png", mobileSrc: "menu-animatronics-latest-mobile.jpg", posX: "55%", posY: "4%", scale: "1.36", offsetY: "36px", cutout: true, darkCutout: true, crop: { x: 0, y: 0, w: 0.5, h: 0.5, inset: 0.02 } },
+        { name: "Bonnie", src: "menu-animatronics-latest.png", mobileSrc: "menu-animatronics-latest-mobile.jpg", posX: "54%", posY: "3%", scale: "1.46", offsetY: "40px", cutout: true, darkCutout: true, crop: { x: 0.5, y: 0, w: 0.5, h: 0.5, inset: 0.02 } },
+        { name: "Chica", src: "menu-animatronics-latest.png", mobileSrc: "menu-animatronics-latest-mobile.jpg", posX: "54%", posY: "3%", scale: "1.44", offsetY: "40px", cutout: true, darkCutout: true, crop: { x: 0, y: 0.5, w: 0.5, h: 0.5, inset: 0.02 } },
+        { name: "Foxy", src: "menu-animatronics-latest.png", mobileSrc: "menu-animatronics-latest-mobile.jpg", posX: "55%", posY: "3%", scale: "1.48", offsetY: "42px", cutout: true, darkCutout: true, crop: { x: 0.5, y: 0.5, w: 0.5, h: 0.5, inset: 0.02 } },
       ];
       let preparedRoster = roster.slice();
 
@@ -10016,11 +10059,11 @@
 
       const preprocessMenuImage = (entry) => new Promise((resolve) => {
         if (!entry || !entry.cutout) {
-          resolve(entry && entry.src ? entry.src : "");
+          resolve(entry && entry.src ? (isMobileAssetMode() && entry.mobileSrc ? entry.mobileSrc : entry.src) : "");
           return;
         }
 
-        const source = entry.src;
+        const source = isMobileAssetMode() && entry.mobileSrc ? entry.mobileSrc : entry.src;
         const raw = new Image();
         raw.src = source;
 
@@ -11183,6 +11226,18 @@
 
       const TABLET_CLOSE_ANIMATION_MS = 640;
       const TABLET_AUDIO_PROFILE = "smooth-weight-v2";
+      const isMobileAssetMode = () => {
+        if (window.matchMedia) {
+          return window.matchMedia("(pointer: coarse), (max-width: 1180px)").matches;
+        }
+        return window.innerWidth <= 1180;
+      };
+      const pickRoomImage = (meta, hasFreddyPresence) => {
+        if (hasFreddyPresence) {
+          return isMobileAssetMode() ? (meta.mobileFreddyImage || meta.freddyImage) : meta.freddyImage;
+        }
+        return isMobileAssetMode() ? (meta.mobileImage || meta.image) : meta.image;
+      };
 
       const roomMeta = {
         "classroom-b": {
@@ -11190,6 +11245,8 @@
           name: "Room 3",
           image: "room3-monitor.png",
           freddyImage: "room3-monitor.png",
+          mobileImage: "room3-monitor-mobile.jpg",
+          mobileFreddyImage: "room3-monitor-mobile.jpg",
           roomClass: "room3",
         },
         room4: {
@@ -11197,6 +11254,8 @@
           name: "Room 4",
           image: "room4-monitor.png",
           freddyImage: "room4-freddy-monitor.png",
+          mobileImage: "room4-monitor-mobile.jpg",
+          mobileFreddyImage: "room4-freddy-monitor-mobile.jpg",
           roomClass: "room4",
         },
         room8: {
@@ -11204,6 +11263,8 @@
           name: "Room 8",
           image: "room8-monitor.png",
           freddyImage: "room8-monitor.png",
+          mobileImage: "room8-monitor-mobile.jpg",
+          mobileFreddyImage: "room8-monitor-mobile.jpg",
           roomClass: "room8",
         },
         room6: {
@@ -11211,6 +11272,8 @@
           name: "Room 6",
           image: "room6-monitor.png",
           freddyImage: "room6-freddy-monitor.png",
+          mobileImage: "room6-monitor-mobile.jpg",
+          mobileFreddyImage: "room6-freddy-monitor-mobile.jpg",
           roomClass: "room6",
         },
         room7: {
@@ -11218,6 +11281,8 @@
           name: "Room 7",
           image: "room7-monitor.png",
           freddyImage: "room7-freddy-monitor.png",
+          mobileImage: "room7-monitor-mobile.jpg",
+          mobileFreddyImage: "room7-freddy-monitor-mobile.jpg",
           roomClass: "room7",
         },
       };
@@ -11445,7 +11510,7 @@
         currentRoom = roomMeta[roomKey] ? roomKey : "classroom-b";
         const roomClass = meta.roomClass || currentRoom;
         const hasFreddyPresence = currentRoom === freddyMonitorRoom && Boolean(meta.freddyImage);
-        const roomImage = hasFreddyPresence ? meta.freddyImage : meta.image;
+        const roomImage = pickRoomImage(meta, hasFreddyPresence);
         tabletCameraStatus.textContent = `${meta.code} · ${meta.name.toUpperCase()}`;
         cameraRoomLabel.textContent = meta.name;
         cameraFeed.dataset.room = roomClass;
