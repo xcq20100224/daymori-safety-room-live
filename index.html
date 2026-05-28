@@ -8362,6 +8362,7 @@
       let jumpscareAudioCtx = null;
       let stage2AudioCtx = null;
       let nightCompleteAudioCtx = null;
+      let survivalAudioPrimed = false;
 
       let currentDoorStage = 0;
       let doorStageClosing = false;
@@ -8388,6 +8389,33 @@
       const randomBetween = (min, max) => Math.floor(min + Math.random() * (max - min + 1));
       const randomFloat = (min, max) => min + Math.random() * (max - min);
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+      const getJumpscareAudioContext = () => {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return null;
+        if (!jumpscareAudioCtx) {
+          jumpscareAudioCtx = new AudioContextCtor();
+        }
+        if (jumpscareAudioCtx.state === "suspended") {
+          void jumpscareAudioCtx.resume().catch(() => {
+          });
+        }
+        return jumpscareAudioCtx;
+      };
+
+      const primeSurvivalAudio = () => {
+        if (survivalAudioPrimed) return;
+        const ctx = getJumpscareAudioContext();
+        if (!ctx) return;
+        survivalAudioPrimed = true;
+
+        const now = ctx.currentTime;
+        const source = ctx.createBufferSource();
+        source.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+        source.connect(ctx.destination);
+        source.start(now);
+        source.stop(now + 0.01);
+      };
 
       const canRunNight = () => {
         return !body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open") && !jumpscareActive && !gameOverActive && !nightCompleteActive;
@@ -8584,64 +8612,87 @@
       };
 
       const playFreddyJumpscareSound = () => {
-        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextCtor) return;
+        const ctx = getJumpscareAudioContext();
+        if (!ctx) return;
 
-        if (!jumpscareAudioCtx) {
-          jumpscareAudioCtx = new AudioContextCtor();
-        }
-        if (jumpscareAudioCtx.state === "suspended") {
-          void jumpscareAudioCtx.resume().catch(() => {
-          });
-        }
-
-        const ctx = jumpscareAudioCtx;
         const now = ctx.currentTime;
         const master = ctx.createGain();
         const crush = ctx.createDynamicsCompressor();
-        crush.threshold.value = -30;
-        crush.knee.value = 5;
-        crush.ratio.value = 12;
-        crush.attack.value = 0.003;
-        crush.release.value = 0.18;
+        crush.threshold.value = -24;
+        crush.knee.value = 4;
+        crush.ratio.value = 18;
+        crush.attack.value = 0.001;
+        crush.release.value = 0.24;
         master.gain.setValueAtTime(0.0001, now);
-        master.gain.exponentialRampToValueAtTime(0.82, now + 0.035);
-        master.gain.exponentialRampToValueAtTime(0.0001, now + 1.08);
+        master.gain.exponentialRampToValueAtTime(0.98, now + 0.018);
+        master.gain.setValueAtTime(0.92, now + 0.32);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 1.42);
         master.connect(crush).connect(ctx.destination);
 
-        const frameCount = Math.floor(ctx.sampleRate * 1.12);
+        const frameCount = Math.floor(ctx.sampleRate * 1.45);
         const buffer = ctx.createBuffer(1, frameCount, ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < frameCount; i += 1) {
           const t = i / ctx.sampleRate;
-          const envelope = Math.max(0, 1 - (t / 1.08));
-          data[i] = ((Math.random() * 2 - 1) * 0.78 + Math.sin(t * 2 * Math.PI * 92) * 0.38) * envelope;
+          const envelope = Math.max(0, 1 - (t / 1.42));
+          const grit = Math.sin(t * 2 * Math.PI * 92) * 0.34 + Math.sin(t * 2 * Math.PI * 183) * 0.18;
+          data[i] = ((Math.random() * 2 - 1) * 0.92 + grit) * envelope;
         }
 
         const noise = ctx.createBufferSource();
         const noiseFilter = ctx.createBiquadFilter();
         noise.buffer = buffer;
         noiseFilter.type = "bandpass";
-        noiseFilter.frequency.setValueAtTime(980, now);
-        noiseFilter.frequency.exponentialRampToValueAtTime(2300, now + 0.24);
-        noiseFilter.frequency.exponentialRampToValueAtTime(420, now + 1.02);
-        noiseFilter.Q.value = 0.72;
+        noiseFilter.frequency.setValueAtTime(1850, now);
+        noiseFilter.frequency.exponentialRampToValueAtTime(5200, now + 0.18);
+        noiseFilter.frequency.exponentialRampToValueAtTime(880, now + 1.36);
+        noiseFilter.Q.value = 1.15;
         noise.connect(noiseFilter).connect(master);
         noise.start(now);
-        noise.stop(now + 1.14);
+        noise.stop(now + 1.45);
+
+        const screamFilter = ctx.createBiquadFilter();
+        screamFilter.type = "bandpass";
+        screamFilter.frequency.setValueAtTime(3100, now);
+        screamFilter.frequency.exponentialRampToValueAtTime(6100, now + 0.22);
+        screamFilter.frequency.exponentialRampToValueAtTime(1900, now + 1.28);
+        screamFilter.Q.value = 5.8;
+
+        const screamGain = ctx.createGain();
+        screamGain.gain.setValueAtTime(0.0001, now);
+        screamGain.gain.exponentialRampToValueAtTime(0.46, now + 0.028);
+        screamGain.gain.setValueAtTime(0.42, now + 0.48);
+        screamGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.38);
+        screamFilter.connect(screamGain).connect(master);
+
+        [760, 1180, 1670].forEach((base, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = index === 0 ? "sawtooth" : "square";
+          osc.frequency.setValueAtTime(base, now);
+          osc.frequency.exponentialRampToValueAtTime(base * 2.85, now + 0.16);
+          osc.frequency.exponentialRampToValueAtTime(base * 1.42, now + 0.74);
+          osc.frequency.exponentialRampToValueAtTime(base * 0.78, now + 1.34);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime([0.18, 0.12, 0.08][index], now + 0.018);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.36);
+          osc.connect(gain).connect(screamFilter);
+          osc.start(now);
+          osc.stop(now + 1.42);
+        });
 
         for (let i = 0; i < 3; i += 1) {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = i === 0 ? "sawtooth" : "square";
           osc.frequency.setValueAtTime([118, 184, 312][i], now);
-          osc.frequency.exponentialRampToValueAtTime([62, 91, 128][i], now + 0.98);
+          osc.frequency.exponentialRampToValueAtTime([46, 72, 116][i], now + 1.25);
           gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.linearRampToValueAtTime([0.18, 0.1, 0.055][i], now + 0.025);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.06);
+          gain.gain.linearRampToValueAtTime([0.24, 0.14, 0.08][i], now + 0.018);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.36);
           osc.connect(gain).connect(master);
           osc.start(now);
-          osc.stop(now + 1.1);
+          osc.stop(now + 1.42);
         }
       };
 
@@ -9212,6 +9263,8 @@
           lastPointerFlashAt = Date.now();
         }
 
+        primeSurvivalAudio();
+
         if (shouldIgnoreFlashlightTarget(event.target)) return;
 
         const point = getFlashlightPoint(event);
@@ -9265,6 +9318,7 @@
 
       window.addEventListener("pointerdown", onFlashlightInput, { passive: true });
       window.addEventListener("click", onFlashlightInput);
+      window.addEventListener("keydown", primeSurvivalAudio);
       if (!window.PointerEvent) {
         window.addEventListener("touchstart", onFlashlightInput, { passive: true });
       }
@@ -9330,6 +9384,7 @@
         }
         window.removeEventListener("pointerdown", onFlashlightInput);
         window.removeEventListener("click", onFlashlightInput);
+        window.removeEventListener("keydown", primeSurvivalAudio);
         if (!window.PointerEvent) {
           window.removeEventListener("touchstart", onFlashlightInput);
         }
