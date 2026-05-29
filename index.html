@@ -2057,6 +2057,21 @@
       background: rgba(16, 23, 31, 0.36);
     }
 
+    .camera-battery-cell.is-warning:not(.is-empty) {
+      background: rgba(238, 232, 204, 0.9);
+      box-shadow: 0 0 8px rgba(238, 232, 204, 0.18);
+    }
+
+    body.power-depleted .camera-battery-shell {
+      border-color: rgba(170, 162, 150, 0.56);
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.42) inset;
+    }
+
+    body.power-depleted .tablet-toggle {
+      opacity: 0.42;
+      filter: grayscale(0.72) brightness(0.74);
+    }
+
     .camera-mute-call {
       pointer-events: auto;
       border: 2px solid rgba(190, 199, 208, 0.7);
@@ -2288,6 +2303,25 @@
     .camera-feed.freddy-departure-flash .classroom-b-scene {
       transform: scale(1.05) translateX(-2px);
       filter: contrast(1.34) saturate(0.18) brightness(1.2) grayscale(0.46) !important;
+    }
+
+    .camera-feed.freddy-fake-signal {
+      animation: cam-cut-jitter 120ms steps(2, end) 1;
+      filter: contrast(1.24) saturate(0.5) brightness(0.9);
+    }
+
+    .camera-feed.freddy-fake-signal .camera-cut-interference {
+      opacity: 1;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0 31%, rgba(255, 255, 255, 0.7) 32% 34%, rgba(255, 255, 255, 0) 35% 100%),
+        repeating-linear-gradient(0deg, rgba(245, 250, 255, 0.38) 0 1px, rgba(0, 0, 0, 0.28) 1px 5px),
+        radial-gradient(ellipse at 50% 39%, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0) 58%);
+      animation: freddy-fake-signal-flash 150ms steps(3, end) 1;
+    }
+
+    .camera-feed.freddy-fake-signal .camera-monitor-flash {
+      background: radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.54), rgba(0, 0, 0, 0) 58%);
+      opacity: 0.64;
     }
 
     .camera-live-dot {
@@ -2733,6 +2767,13 @@
       32% { opacity: 0.18; transform: translate3d(2px, -1px, 0); }
       54% { opacity: 0.9; transform: translate3d(-1px, -1px, 0); }
       72% { opacity: 0.28; transform: translate3d(1px, 1px, 0); }
+      100% { opacity: 0; transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes freddy-fake-signal-flash {
+      0% { opacity: 0; transform: translate3d(0, 0, 0); }
+      22% { opacity: 0.9; transform: translate3d(2px, -1px, 0); }
+      58% { opacity: 0.2; transform: translate3d(-2px, 1px, 0); }
       100% { opacity: 0; transform: translate3d(0, 0, 0); }
     }
 
@@ -8101,12 +8142,12 @@
       <div class="tablet-header">
         <div class="camera-hud-left" aria-hidden="true">
           <div class="camera-battery">
-            <span class="camera-battery-label">Flashlight</span>
+            <span class="camera-battery-label">Power</span>
             <span class="camera-battery-shell">
               <span class="camera-battery-cell"></span>
               <span class="camera-battery-cell"></span>
               <span class="camera-battery-cell"></span>
-              <span class="camera-battery-cell is-empty"></span>
+              <span class="camera-battery-cell"></span>
             </span>
           </div>
           <button class="camera-mute-call" type="button" tabindex="-1">Mute Call</button>
@@ -8358,6 +8399,11 @@
       const VENT_SHADOW_PROFILE = "flashlight-revealed-vent-soft-inner-v8";
       const FREDDY_CAMERA_WATCH_SLOWDOWN = 0.38;
       const FREDDY_CAMERA_FLASH_SLOWDOWN = 0.18;
+      const POWER_MAX = 100;
+      const POWER_AMBIENT_DRAIN_PER_MS = 0.000055;
+      const POWER_TABLET_DRAIN_PER_MS = 0.00013;
+      const POWER_ROOM_FLASH_COST = 1.15;
+      const POWER_MONITOR_FLASH_COST = 1.05;
       const FREDDY_ATTACK_ROUTES = [
         {
           key: "route1",
@@ -8402,6 +8448,7 @@
       let doorStageClosing = false;
       let flashlightRequiredHits = FLASHLIGHT_HITS_MIN;
       let flashlightCurrentHits = 0;
+      let powerLevel = POWER_MAX;
       let nightElapsedMs = 0;
       let nightStarted = false;
       let nightCleared = false;
@@ -8451,6 +8498,42 @@
         source.stop(now + 0.01);
       };
 
+      const updatePowerReadout = () => {
+        const cells = Array.from(document.querySelectorAll(".camera-battery-cell"));
+        const filled = Math.ceil(clamp(powerLevel, 0, POWER_MAX) / 25);
+        cells.forEach((cell, index) => {
+          const active = index < filled && powerLevel > 0;
+          cell.classList.toggle("is-empty", !active);
+          cell.classList.toggle("is-warning", active && powerLevel <= 35);
+        });
+        const label = document.querySelector(".camera-battery-label");
+        if (label) label.textContent = powerLevel <= 0 ? "Power Lost" : "Power";
+        body.classList.toggle("power-depleted", powerLevel <= 0);
+        window.__daymoriPowerState = {
+          level: Math.round(powerLevel * 10) / 10,
+          cells: filled,
+          depleted: powerLevel <= 0,
+        };
+      };
+
+      const drainPower = (amount) => {
+        if (powerLevel <= 0 || nightCleared || gameOverActive) return false;
+        powerLevel = clamp(powerLevel - amount, 0, POWER_MAX);
+        updatePowerReadout();
+        if (powerLevel <= 0) {
+          clearMonitorFlash();
+          if (typeof window.__daymoriForceCloseTabletForPower === "function") {
+            window.__daymoriForceCloseTabletForPower();
+          }
+        }
+        return powerLevel > 0;
+      };
+
+      const hasPower = () => powerLevel > 0;
+
+      window.__daymoriHasPower = hasPower;
+      window.__daymoriDrainPower = drainPower;
+
       const canRunNight = () => {
         return !body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open") && !jumpscareActive && !gameOverActive && !nightCompleteActive;
       };
@@ -8492,6 +8575,7 @@
           freddyRoute: activeFreddyRoute ? activeFreddyRoute.key : null,
           freddyRouteStep: activeFreddyRouteStep ? (activeFreddyRouteStep.room || activeFreddyRouteStep.label || "blind-spot") : null,
           freddyRouteStepMs: Math.round(activeFreddyRouteStepMs),
+          power: Math.round(powerLevel * 10) / 10,
           nightCompleteActive,
           jumpscareActive,
           gameOver: gameOverActive,
@@ -8502,6 +8586,9 @@
         currentFreddyMonitorRoom = roomKey || null;
         if (typeof window.__daymoriSetFreddyMonitorRoom === "function") {
           window.__daymoriSetFreddyMonitorRoom(currentFreddyMonitorRoom, options);
+        }
+        if (options.sound !== false && currentFreddyMonitorRoom) {
+          playFreddyMovementCue(currentFreddyMonitorRoom);
         }
       };
 
@@ -8897,7 +8984,89 @@
         };
       };
 
+      const playFreddyMovementCue = (roomKey) => {
+        if (!roomKey) return;
+        const ctx = getJumpscareAudioContext();
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.linearRampToValueAtTime(0.22, now + 0.04);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 1.65);
+        master.connect(ctx.destination);
+
+        const roomPitch = {
+          "classroom-b": 86,
+          room4: 98,
+          room6: 74,
+          room7: 112,
+          room8: 91,
+        }[roomKey] || 88;
+
+        [0, 0.38].forEach((offset, index) => {
+          const foot = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          foot.type = "triangle";
+          foot.frequency.setValueAtTime(roomPitch * (index ? 0.82 : 1), now + offset);
+          foot.frequency.exponentialRampToValueAtTime(42, now + offset + 0.22);
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(190, now + offset);
+          gain.gain.setValueAtTime(0.0001, now + offset);
+          gain.gain.linearRampToValueAtTime(index ? 0.13 : 0.18, now + offset + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.3);
+          foot.connect(filter).connect(gain).connect(master);
+          foot.start(now + offset);
+          foot.stop(now + offset + 0.34);
+        });
+
+        const scrapeDuration = 0.62;
+        const scrape = ctx.createBufferSource();
+        const scrapeFilter = ctx.createBiquadFilter();
+        const scrapeGain = ctx.createGain();
+        const frameCount = Math.floor(ctx.sampleRate * scrapeDuration);
+        const buffer = ctx.createBuffer(1, frameCount, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < frameCount; i += 1) {
+          const t = i / ctx.sampleRate;
+          data[i] = (Math.random() * 2 - 1) * Math.max(0, 1 - t / scrapeDuration);
+        }
+        scrape.buffer = buffer;
+        scrapeFilter.type = "bandpass";
+        scrapeFilter.frequency.setValueAtTime(520, now + 0.16);
+        scrapeFilter.frequency.linearRampToValueAtTime(260, now + 0.74);
+        scrapeFilter.Q.value = 1.6;
+        scrapeGain.gain.setValueAtTime(0.0001, now + 0.14);
+        scrapeGain.gain.linearRampToValueAtTime(0.08, now + 0.24);
+        scrapeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.92);
+        scrape.connect(scrapeFilter).connect(scrapeGain).connect(master);
+        scrape.start(now + 0.14);
+        scrape.stop(now + 0.96);
+
+        if (Math.random() < 0.46 || roomKey === "room8") {
+          [0, 0.19, 0.37].forEach((offset, index) => {
+            const laugh = ctx.createOscillator();
+            const laughGain = ctx.createGain();
+            const laughFilter = ctx.createBiquadFilter();
+            laugh.type = "sawtooth";
+            laugh.frequency.setValueAtTime([214, 184, 162][index], now + 0.68 + offset);
+            laugh.frequency.linearRampToValueAtTime([182, 158, 138][index], now + 0.78 + offset);
+            laughFilter.type = "bandpass";
+            laughFilter.frequency.setValueAtTime(760, now + 0.68 + offset);
+            laughFilter.Q.value = 3.2;
+            laughGain.gain.setValueAtTime(0.0001, now + 0.66 + offset);
+            laughGain.gain.linearRampToValueAtTime(0.055, now + 0.7 + offset);
+            laughGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9 + offset);
+            laugh.connect(laughFilter).connect(laughGain).connect(master);
+            laugh.start(now + 0.66 + offset);
+            laugh.stop(now + 0.94 + offset);
+          });
+        }
+      };
+
       const emitFlashlightPulse = (clientX, clientY) => {
+        if (!drainPower(POWER_ROOM_FLASH_COST)) return false;
         clearFlashlightTimers();
 
         if (viewport) {
@@ -8930,10 +9099,13 @@
           doorPresence.classList.remove("flashlight-hit");
           flashlightHitTimer = null;
         }, FLASHLIGHT_HIT_CLASS_MS);
+
+        return true;
       };
 
       const emitMonitorFlashlightPulse = (clientX, clientY) => {
         if (!cameraFeed) return;
+        if (!drainPower(POWER_MONITOR_FLASH_COST)) return;
         clearMonitorFlash();
 
         const rect = cameraFeed.getBoundingClientRect();
@@ -9235,6 +9407,7 @@
         body.classList.remove("freddy-jumpscare-active", "freddy-game-over", "night-complete-active");
         nightCompleteLayer.classList.remove("is-time-visible", "is-splitting", "is-split-fade");
         nightElapsedMs = 0;
+        powerLevel = POWER_MAX;
         attackTimeline = buildFreddyAttackTimeline();
         nextAttackIndex = 0;
         attackTriggeredCount = 0;
@@ -9242,6 +9415,7 @@
         clearFreddyRoute({ returnToRoom3: true });
         setDoorStage(0);
         resetFlashlightProgress();
+        updatePowerReadout();
         syncNightReadout();
         updateNightDebug();
       };
@@ -9254,7 +9428,10 @@
 
         if (!canRunNight() || nightCleared) return;
 
-        emitFlashlightPulse(event.clientX, event.clientY);
+        if (!emitFlashlightPulse(event.clientX, event.clientY)) {
+          updateNightDebug();
+          return;
+        }
 
         if (!nightStarted || currentDoorStage < 1 || doorStageClosing) {
           updateNightDebug();
@@ -9328,6 +9505,9 @@
           return;
         }
 
+        const tabletOpen = body.classList.contains("tablet-open");
+        drainPower((POWER_AMBIENT_DRAIN_PER_MS + (tabletOpen ? POWER_TABLET_DRAIN_PER_MS : 0)) * delta);
+
         nightElapsedMs = clamp(nightElapsedMs + delta, 0, NIGHT_DURATION_MS);
         syncNightReadout();
 
@@ -9370,10 +9550,12 @@
       });
 
       setDoorStage(0);
+      updatePowerReadout();
       syncNightReadout();
       updateNightDebug();
       window.__daymoriTriggerFreddyJumpscare = triggerFreddyJumpscare;
       window.__daymoriTriggerFreddyIndoorStage = triggerFreddyIndoorStage;
+      window.__daymoriTriggerFreddyAttack = triggerFreddyAttack;
       window.__daymoriTriggerNightComplete = triggerNightCompleteAnimation;
       scheduleNightLoop();
 
@@ -9387,7 +9569,10 @@
         clearMonitorFlash();
         delete window.__daymoriTriggerFreddyJumpscare;
         delete window.__daymoriTriggerFreddyIndoorStage;
+        delete window.__daymoriTriggerFreddyAttack;
         delete window.__daymoriTriggerNightComplete;
+        delete window.__daymoriHasPower;
+        delete window.__daymoriDrainPower;
         if (jumpscareEndTimer) {
           window.clearTimeout(jumpscareEndTimer);
           jumpscareEndTimer = null;
@@ -11306,6 +11491,8 @@
       let room6FreddyRevealTimer = null;
       let room7FreddyRevealTimer = null;
       let freddyDepartureFlashTimer = null;
+      let fakeSignalTimer = null;
+      let fakeSignalClearTimer = null;
       let closeAnimationTimer = null;
       let tabletAudioCtx = null;
       let tabletAudioMaster = null;
@@ -11425,6 +11612,58 @@
           cameraFeed.classList.remove("freddy-departure-flash");
           freddyDepartureFlashTimer = null;
         }, 390);
+      };
+
+      const clearFakeSignal = () => {
+        if (fakeSignalClearTimer) {
+          window.clearTimeout(fakeSignalClearTimer);
+          fakeSignalClearTimer = null;
+        }
+        cameraFeed.classList.remove("freddy-fake-signal");
+        if (classroomBScene) {
+          classroomBScene.dataset.fakeFreddy = "false";
+        }
+        syncRoom(currentRoom);
+      };
+
+      const scheduleFakeSignal = () => {
+        if (fakeSignalTimer || !tabletOpen) return;
+        fakeSignalTimer = window.setTimeout(() => {
+          fakeSignalTimer = null;
+          if (!tabletOpen) return;
+          if (Math.random() < 0.58) {
+            triggerFakeSignal();
+          }
+          scheduleFakeSignal();
+        }, 18000 + Math.random() * 26000);
+      };
+
+      const stopFakeSignal = () => {
+        if (fakeSignalTimer) {
+          window.clearTimeout(fakeSignalTimer);
+          fakeSignalTimer = null;
+        }
+        clearFakeSignal();
+      };
+
+      const triggerFakeSignal = () => {
+        if (!tabletOpen || freddyMonitorRoom === currentRoom) return;
+        if (fakeSignalClearTimer) {
+          window.clearTimeout(fakeSignalClearTimer);
+          fakeSignalClearTimer = null;
+        }
+
+        const meta = roomMeta[currentRoom] || roomMeta["classroom-b"];
+        const fakeImage = meta && meta.freddyImage ? pickRoomImage(meta, true) : "";
+        cameraFeed.classList.remove("freddy-fake-signal");
+        void cameraFeed.offsetWidth;
+        cameraFeed.classList.add("freddy-fake-signal");
+        triggerSignalCut();
+        if (classroomBScene && fakeImage && Math.random() < 0.62) {
+          classroomBScene.dataset.fakeFreddy = "true";
+          classroomBScene.style.setProperty("--monitor-room-image", `url("${fakeImage}")`);
+        }
+        fakeSignalClearTimer = window.setTimeout(clearFakeSignal, 155);
       };
 
       const triggerRoom4VerdictFlash = () => {
@@ -11757,7 +11996,8 @@
       };
 
       const canOpenTablet = () => {
-        return !body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open");
+        const hasPower = typeof window.__daymoriHasPower !== "function" || window.__daymoriHasPower();
+        return hasPower && !body.classList.contains("main-menu-open") && !body.classList.contains("intro-sequence-open");
       };
 
       const ensureTabletAudio = () => {
@@ -12296,6 +12536,7 @@
         if (currentRoom === "room8") {
           startRoom8Observation();
         }
+        scheduleFakeSignal();
       };
 
       const closeTablet = () => {
@@ -12306,6 +12547,7 @@
           closeAnimationTimer = null;
         }
         stopRoom8Observation();
+        stopFakeSignal();
         playTabletFlipSound("close");
         body.classList.remove("tablet-open");
         body.classList.add("tablet-closing");
@@ -12315,6 +12557,9 @@
           closeAnimationTimer = null;
         }, TABLET_CLOSE_ANIMATION_MS);
       };
+
+      window.__daymoriForceCloseTabletForPower = closeTablet;
+      window.__daymoriTriggerFakeMonitorSignal = triggerFakeSignal;
 
       toggleBtn.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -12397,6 +12642,14 @@
           window.clearTimeout(freddyDepartureFlashTimer);
           freddyDepartureFlashTimer = null;
         }
+        if (fakeSignalTimer) {
+          window.clearTimeout(fakeSignalTimer);
+          fakeSignalTimer = null;
+        }
+        if (fakeSignalClearTimer) {
+          window.clearTimeout(fakeSignalClearTimer);
+          fakeSignalClearTimer = null;
+        }
         if (room7PlayTimer) {
           window.clearTimeout(room7PlayTimer);
           room7PlayTimer = null;
@@ -12416,6 +12669,8 @@
         delete window.__daymoriPlayRoom7FlashSound;
         delete window.__daymoriPlayRoom3FlashSound;
         delete window.__daymoriSetFreddyMonitorRoom;
+        delete window.__daymoriForceCloseTabletForPower;
+        delete window.__daymoriTriggerFakeMonitorSignal;
         tabletOpen = false;
         body.classList.remove("tablet-open");
         body.classList.remove("tablet-closing");
