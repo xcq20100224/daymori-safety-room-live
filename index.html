@@ -2265,6 +2265,31 @@
       filter: contrast(1.14) saturate(0.5) brightness(0.42) hue-rotate(198deg);
     }
 
+    .camera-feed.freddy-departure-flash {
+      animation: cam-cut-jitter 170ms steps(2, end) 1;
+      filter: contrast(1.18) saturate(0.62) brightness(0.92);
+    }
+
+    .camera-feed.freddy-departure-flash .camera-cut-interference {
+      opacity: 1;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0 18%, rgba(255, 255, 255, 0.78) 19% 21%, rgba(255, 255, 255, 0) 22% 42%, rgba(255, 255, 255, 0.52) 43% 45%, rgba(255, 255, 255, 0) 46% 100%),
+        repeating-linear-gradient(0deg, rgba(248, 252, 255, 0.44) 0 1px, rgba(4, 8, 12, 0.32) 1px 5px),
+        radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0) 62%);
+      animation: freddy-departure-monitor-flash 360ms steps(5, end) 1;
+    }
+
+    .camera-feed.freddy-departure-flash .camera-monitor-flash {
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.72) 0%, rgba(230, 238, 246, 0.38) 22%, rgba(106, 126, 144, 0.08) 54%, rgba(0, 0, 0, 0) 74%);
+      opacity: 0.92;
+    }
+
+    .camera-feed.freddy-departure-flash .classroom-b-scene {
+      transform: scale(1.05) translateX(-2px);
+      filter: contrast(1.34) saturate(0.18) brightness(1.2) grayscale(0.46) !important;
+    }
+
     .camera-live-dot {
       position: absolute;
       left: clamp(14px, 1.9vw, 22px);
@@ -2700,6 +2725,15 @@
       100% {
         transform: translate3d(0px, 0px, 0px);
       }
+    }
+
+    @keyframes freddy-departure-monitor-flash {
+      0% { opacity: 0; transform: translate3d(0, 0, 0); }
+      14% { opacity: 0.98; transform: translate3d(-2px, 1px, 0); }
+      32% { opacity: 0.18; transform: translate3d(2px, -1px, 0); }
+      54% { opacity: 0.9; transform: translate3d(-1px, -1px, 0); }
+      72% { opacity: 0.28; transform: translate3d(1px, 1px, 0); }
+      100% { opacity: 0; transform: translate3d(0, 0, 0); }
     }
 
     @keyframes stage-stars-sway {
@@ -11271,6 +11305,7 @@
       let room8FreddyRevealTimer = null;
       let room6FreddyRevealTimer = null;
       let room7FreddyRevealTimer = null;
+      let freddyDepartureFlashTimer = null;
       let closeAnimationTimer = null;
       let tabletAudioCtx = null;
       let tabletAudioMaster = null;
@@ -11375,6 +11410,21 @@
           cameraFeed.classList.remove("is-signal-cut");
           signalCutTimer = null;
         }, 240);
+      };
+
+      const triggerFreddyDepartureFlash = () => {
+        if (!tabletOpen) return;
+        if (freddyDepartureFlashTimer) {
+          window.clearTimeout(freddyDepartureFlashTimer);
+          freddyDepartureFlashTimer = null;
+        }
+        cameraFeed.classList.remove("freddy-departure-flash");
+        void cameraFeed.offsetWidth;
+        cameraFeed.classList.add("freddy-departure-flash");
+        freddyDepartureFlashTimer = window.setTimeout(() => {
+          cameraFeed.classList.remove("freddy-departure-flash");
+          freddyDepartureFlashTimer = null;
+        }, 390);
       };
 
       const triggerRoom4VerdictFlash = () => {
@@ -11653,10 +11703,15 @@
 
       const setFreddyMonitorRoom = (roomKey, options = {}) => {
         const nextRoom = roomKey && roomMeta[roomKey] ? roomKey : null;
+        const previousRoom = freddyMonitorRoom;
         const changed = freddyMonitorRoom !== nextRoom;
+        const shouldFlashDeparture = changed && previousRoom && currentRoom === previousRoom;
         freddyMonitorRoom = nextRoom;
         if (roomMeta[currentRoom] && roomMeta[currentRoom].freddyImage) {
           syncRoom(currentRoom);
+        }
+        if (shouldFlashDeparture) {
+          triggerFreddyDepartureFlash();
         }
         if (changed && nextRoom === "room6") {
           triggerSignalCut();
@@ -12337,6 +12392,10 @@
         if (room7FreddyRevealTimer) {
           window.clearTimeout(room7FreddyRevealTimer);
           room7FreddyRevealTimer = null;
+        }
+        if (freddyDepartureFlashTimer) {
+          window.clearTimeout(freddyDepartureFlashTimer);
+          freddyDepartureFlashTimer = null;
         }
         if (room7PlayTimer) {
           window.clearTimeout(room7PlayTimer);
