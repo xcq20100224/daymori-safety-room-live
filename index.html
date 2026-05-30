@@ -3682,16 +3682,18 @@
     .main-menu-btn {
       width: 100%;
       min-height: clamp(56px, 8.7vh, 96px);
+      position: relative;
       font-size: 0;
       line-height: 0;
       letter-spacing: 0;
       color: transparent;
       text-shadow: none;
       background: rgba(0, 0, 0, 0);
-      border: 0;
-      border-radius: 2px;
+      border: 1px solid rgba(235, 210, 176, 0);
+      border-radius: 4px;
       cursor: pointer;
       pointer-events: auto;
+      transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
     }
 
     .main-menu-btn::before,
@@ -3703,7 +3705,11 @@
     .main-menu-btn:hover,
     .main-menu-btn:focus-visible,
     .main-menu-btn.is-selected {
-      background: rgba(0, 0, 0, 0);
+      background:
+        linear-gradient(90deg, rgba(244, 216, 178, 0.16), rgba(244, 216, 178, 0.065) 54%, rgba(244, 216, 178, 0));
+      border-color: rgba(244, 216, 178, 0.42);
+      box-shadow: 0 0 0 1px rgba(8, 5, 3, 0.42) inset, 0 0 12px rgba(234, 197, 146, 0.16);
+      filter: brightness(1.08);
       outline: none;
     }
 
@@ -4147,6 +4153,41 @@
       38% { transform: scale(1.016); opacity: 0.29; }
       72% { transform: scale(1.009); opacity: 0.24; }
       100% { transform: scale(1.003); opacity: 0.2; }
+    }
+
+    .wall-breath-layer {
+      animation-duration: 18s !important;
+      transition: opacity 420ms ease, transform 520ms ease, filter 420ms ease;
+    }
+
+    .wall-stain-layer,
+    .wall-shadow-layer,
+    .wall-human-layer,
+    .menu-chroma-layer,
+    .wall-local-dim-layer {
+      transition: opacity 360ms ease, transform 460ms ease, filter 360ms ease;
+    }
+
+    #character {
+      transition: transform 220ms ease-out, filter 220ms ease-out, opacity 180ms ease-out !important;
+    }
+
+    #character.is-glitching {
+      --character-blur: 0.08px;
+      mix-blend-mode: normal;
+    }
+
+    .character-ghost {
+      transition: opacity 240ms ease-out, transform 240ms ease-out, filter 240ms ease-out;
+    }
+
+    .main-menu-frame img {
+      transition: opacity 260ms ease, transform 280ms ease, filter 260ms ease !important;
+    }
+
+    .main-menu-frame.is-swapping img {
+      opacity: 0.68;
+      filter: brightness(0.9) contrast(1.08) saturate(0.72) !important;
     }
 
     @media (max-width: 900px) {
@@ -4756,6 +4797,17 @@
       filter: none;
       animation: none;
       background: rgba(255, 226, 184, 0.035);
+    }
+
+    .main-menu .main-menu-btn:hover,
+    .main-menu .main-menu-btn:focus-visible,
+    .main-menu .main-menu-btn.is-selected {
+      background:
+        linear-gradient(90deg, rgba(246, 219, 184, 0.18), rgba(246, 219, 184, 0.08) 56%, rgba(246, 219, 184, 0.018) 100%);
+      border: 1px solid rgba(246, 219, 184, 0.38);
+      border-radius: 5px;
+      box-shadow: 0 0 0 1px rgba(8, 5, 3, 0.46) inset, 0 0 14px rgba(236, 196, 142, 0.14);
+      filter: brightness(1.08);
     }
 
     .main-menu .menu-scene-bridge {
@@ -7779,10 +7831,103 @@
       opacity: 0.36 !important;
     }
 
+    .camera-feed.monitor-flashlight-active .camera-monitor-flash {
+      background:
+        radial-gradient(ellipse 10% 7% at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(255, 252, 238, 0.78) 0%, rgba(252, 238, 205, 0.42) 42%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(ellipse 28% 21% at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(255, 244, 219, 0.28) 0%, rgba(220, 197, 162, 0.11) 54%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(ellipse 56% 40% at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(212, 187, 151, 0.11) 0%, rgba(104, 86, 64, 0.035) 58%, rgba(0, 0, 0, 0) 100%) !important;
+      opacity: 0.82 !important;
+      filter: blur(0.25px) saturate(0.82) contrast(1.04) !important;
+      transition: opacity 120ms ease-out !important;
+    }
+
+    .camera-feed.is-room3:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room3-storeroom-effects::before,
+    .camera-feed.is-room4:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room4-judgement-effects::before,
+    .camera-feed.is-room8:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room8-observation-effects::before {
+      content: "";
+      position: absolute;
+      top: 6%;
+      left: 50%;
+      width: clamp(52px, 8vw, 118px);
+      height: clamp(52px, 8vw, 118px);
+      transform: translateX(-50%);
+      border-radius: 50%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, rgba(255, 240, 194, 0.54) 0%, rgba(246, 213, 150, 0.25) 19%, rgba(126, 95, 58, 0.07) 42%, rgba(0, 0, 0, 0) 70%);
+      mix-blend-mode: screen;
+      opacity: 0.48;
+      filter: blur(0.35px);
+      animation: room-top-bulb-soft-flicker 7.2s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .camera-feed.is-room3 .room3-storeroom-effects::before { left: 49%; top: 5%; animation-delay: -1.2s; }
+    .camera-feed.is-room4 .room4-judgement-effects::before { left: 50%; top: 6%; animation-delay: -3.4s; }
+    .camera-feed.is-room8 .room8-observation-effects::before { left: 50%; top: 7%; animation-delay: -5.1s; }
+
+    .camera-feed.is-room3:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room3-storeroom-effects::after,
+    .camera-feed.is-room4:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room4-judgement-effects::after,
+    .camera-feed.is-room8:not(.is-signal-cut):not(.freddy-departure-flash):not(.freddy-fake-signal) .room8-observation-effects::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 42% 32% at 50% 18%, rgba(255, 232, 184, 0.08), rgba(0, 0, 0, 0) 74%),
+        linear-gradient(to bottom, rgba(255, 227, 180, 0.035), rgba(0, 0, 0, 0.045));
+      mix-blend-mode: soft-light;
+      opacity: 0.44;
+      animation: monitor-room-light-breathe 6.8s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes room-top-bulb-soft-flicker {
+      0%, 100% { opacity: 0.38; transform: translateX(-50%) scale(0.98); filter: blur(0.4px) brightness(0.92); }
+      18% { opacity: 0.58; transform: translateX(-50%) scale(1.02); filter: blur(0.25px) brightness(1.16); }
+      31% { opacity: 0.44; transform: translateX(-50%) scale(0.99); filter: blur(0.35px) brightness(0.98); }
+      56% { opacity: 0.62; transform: translateX(-50%) scale(1.03); filter: blur(0.2px) brightness(1.22); }
+      64% { opacity: 0.5; transform: translateX(-50%) scale(1); filter: blur(0.3px) brightness(1.02); }
+      78% { opacity: 0.66; transform: translateX(-50%) scale(1.025); filter: blur(0.22px) brightness(1.26); }
+    }
+
+    @keyframes monitor-room-light-breathe {
+      0%, 100% { opacity: 0.34; }
+      38% { opacity: 0.5; }
+      58% { opacity: 0.39; }
+      82% { opacity: 0.54; }
+    }
+
     .camera-feed.is-room3.monitor-flashlight-active .camera-monitor-flash {
       background:
         radial-gradient(circle 11% at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(255, 236, 204, 0.55) 0%, rgba(215, 224, 232, 0.16) 52%, rgba(0, 0, 0, 0) 82%) !important;
       opacity: 0.72 !important;
+    }
+
+    .camera-feed {
+      --cam-flash-x: 50%;
+      --cam-flash-y: 52%;
+    }
+
+    .camera-feed.monitor-flashlight-active .camera-monitor-flash {
+      background:
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(255, 252, 238, 0.72) 0%, rgba(255, 241, 210, 0.36) 12%, rgba(210, 188, 155, 0.13) 28%, rgba(0, 0, 0, 0) 52%),
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(255, 232, 190, 0.18) 0%, rgba(198, 170, 132, 0.08) 38%, rgba(0, 0, 0, 0) 72%),
+        radial-gradient(circle at 50% 52%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.18) 76%, rgba(0, 0, 0, 0.34) 100%) !important;
+      opacity: 0.78 !important;
+      filter: blur(0.18px) saturate(0.86) contrast(1.04) !important;
+    }
+
+    .camera-feed.is-room3.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room4.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room6.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room7.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room8.monitor-flashlight-active .camera-monitor-flash {
+      background:
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(255, 252, 238, 0.74) 0%, rgba(255, 241, 210, 0.38) 12%, rgba(210, 188, 155, 0.14) 28%, rgba(0, 0, 0, 0) 52%),
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(255, 232, 190, 0.2) 0%, rgba(198, 170, 132, 0.085) 38%, rgba(0, 0, 0, 0) 72%),
+        radial-gradient(circle at 50% 52%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.18) 76%, rgba(0, 0, 0, 0.34) 100%) !important;
+      filter: blur(0.18px) saturate(0.86) contrast(1.04) !important;
     }
 
     .room3-wall-sign,
@@ -8375,7 +8520,6 @@
                 <path class="route-wire" d="M18 90 H32 H50 H74 H92" />
                 <path class="route-wire jitter-fast" d="M32 96 V90" />
                 <path class="route-wire jitter-slow" d="M74 96 V90" />
-                <path class="is-active-route" d="M50 90 H92 V61 V39 V10" />
               </svg>
 
               <button class="map-room room-block node-room11" type="button">Room 11</button>
@@ -9334,7 +9478,7 @@
             cameraFeed.classList.remove("monitor-flashlight-active");
           }
           monitorFlashTimer = null;
-        }, 230);
+        }, 340);
       };
 
       const setDoorStage = (stage) => {
@@ -10843,27 +10987,31 @@
         frameEl.classList.add("is-flicker");
         window.setTimeout(() => {
           frameEl.classList.remove("is-flicker");
-        }, 95 + Math.floor(Math.random() * 80));
+        }, 190 + Math.floor(Math.random() * 120));
       };
 
       const scheduleFlicker = () => {
         flickerTimer = window.setTimeout(() => {
           flickerOnce();
-          if (Math.random() < 0.42) {
-            window.setTimeout(flickerOnce, 55 + Math.floor(Math.random() * 100));
+          if (Math.random() < 0.16) {
+            window.setTimeout(flickerOnce, 180 + Math.floor(Math.random() * 180));
           }
           scheduleFlicker();
-        }, 460 + Math.floor(Math.random() * 720));
+        }, 1600 + Math.floor(Math.random() * 2600));
       };
 
       const scheduleSwap = () => {
         swapTimer = window.setTimeout(() => {
+          frameEl.classList.add("is-swapping");
           flickerOnce();
           window.setTimeout(() => {
             refreshCharacter(pickNextIndex());
-          }, 120);
+            window.setTimeout(() => {
+              frameEl.classList.remove("is-swapping");
+            }, 260);
+          }, 220);
           scheduleSwap();
-        }, 7400 + Math.floor(Math.random() * 3600));
+        }, 9200 + Math.floor(Math.random() * 5200));
       };
 
       const scheduleJitter = () => {
@@ -10871,28 +11019,28 @@
           if (!body.classList.contains("main-menu-open")) return;
 
           frameEl.classList.add("is-jitter");
-          imageEl.style.setProperty("--menu-jitter-x", `${(Math.random() * 2.4 - 1.2).toFixed(2)}px`);
-          imageEl.style.setProperty("--menu-jitter-y", `${(Math.random() * 2 - 1).toFixed(2)}px`);
+          imageEl.style.setProperty("--menu-jitter-x", `${(Math.random() * 1.1 - 0.55).toFixed(2)}px`);
+          imageEl.style.setProperty("--menu-jitter-y", `${(Math.random() * 0.9 - 0.45).toFixed(2)}px`);
 
           jitterResetTimer = window.setTimeout(() => {
             frameEl.classList.remove("is-jitter");
             imageEl.style.setProperty("--menu-jitter-x", "0px");
             imageEl.style.setProperty("--menu-jitter-y", "0px");
             jitterResetTimer = null;
-          }, 160 + Math.floor(Math.random() * 180));
+          }, 240 + Math.floor(Math.random() * 180));
 
           scheduleJitter();
-        }, 1100 + Math.floor(Math.random() * 1400));
+        }, 2400 + Math.floor(Math.random() * 2600));
       };
 
       const scheduleMicroJitter = () => {
         microJitterTimer = window.setTimeout(() => {
           if (!body.classList.contains("main-menu-open")) return;
 
-          imageEl.style.setProperty("--menu-live-jitter-x", `${(Math.random() * 0.7 - 0.35).toFixed(2)}px`);
-          imageEl.style.setProperty("--menu-live-jitter-y", `${(Math.random() * 0.56 - 0.28).toFixed(2)}px`);
+          imageEl.style.setProperty("--menu-live-jitter-x", `${(Math.random() * 0.38 - 0.19).toFixed(2)}px`);
+          imageEl.style.setProperty("--menu-live-jitter-y", `${(Math.random() * 0.32 - 0.16).toFixed(2)}px`);
           scheduleMicroJitter();
-        }, 70 + Math.floor(Math.random() * 110));
+        }, 190 + Math.floor(Math.random() * 170));
       };
 
       const stopMenuMotion = () => {
@@ -11163,24 +11311,24 @@
       };
 
       const pulseEnvironment = (strength = 1) => {
-        const shadowX = `${Math.round(random(-12, 13) * strength)}px`;
-        const shadowY = `${Math.round(random(-7, 8) * strength)}px`;
-        const stainX = `${Math.round(random(-6, 7) * strength)}px`;
-        const stainY = `${Math.round(random(-5, 6) * strength)}px`;
+        const shadowX = `${Math.round(random(-7, 8) * strength)}px`;
+        const shadowY = `${Math.round(random(-4, 5) * strength)}px`;
+        const stainX = `${Math.round(random(-4, 5) * strength)}px`;
+        const stainY = `${Math.round(random(-3, 4) * strength)}px`;
 
         menuLayout.style.setProperty("--wall-shadow-x", shadowX);
         menuLayout.style.setProperty("--wall-shadow-y", shadowY);
-        menuLayout.style.setProperty("--wall-shadow-opacity", random(0.46, 0.62).toFixed(3));
+        menuLayout.style.setProperty("--wall-shadow-opacity", random(0.38, 0.52).toFixed(3));
         menuLayout.style.setProperty("--wall-stain-x", stainX);
         menuLayout.style.setProperty("--wall-stain-y", stainY);
-        menuLayout.style.setProperty("--wall-stain-opacity", random(0.62, 0.74).toFixed(3));
-        menuLayout.style.setProperty("--wall-human-opacity", random(0.05, 0.12).toFixed(3));
-        menuLayout.style.setProperty("--wall-chroma-x", `${Math.round(random(-2, 3))}px`);
+        menuLayout.style.setProperty("--wall-stain-opacity", random(0.5, 0.64).toFixed(3));
+        menuLayout.style.setProperty("--wall-human-opacity", random(0.035, 0.075).toFixed(3));
+        menuLayout.style.setProperty("--wall-chroma-x", `${Math.round(random(-1, 2))}px`);
         menuScreen.classList.add("environment-hit", "environment-glitch");
 
         later(() => {
           menuScreen.classList.remove("environment-glitch");
-        }, 60);
+        }, 120);
 
         later(() => {
           menuScreen.classList.remove("environment-hit");
@@ -11188,7 +11336,7 @@
           menuLayout.style.setProperty("--wall-stain-opacity", random(0.54, 0.68).toFixed(3));
           menuLayout.style.setProperty("--wall-human-opacity", random(0.035, 0.08).toFixed(3));
           menuLayout.style.setProperty("--wall-chroma-x", "0px");
-        }, 220);
+        }, 420);
       };
 
       const setCharacter = (role, options = {}) => {
@@ -11328,7 +11476,7 @@
       const glitchTransition = (targetRole, done) => {
         switching = true;
         pulseEnvironment(1.2);
-        const flashes = Math.floor(random(2, 4));
+        const flashes = Math.floor(random(1, 3));
         let step = 0;
         character.classList.add("is-glitching");
 
@@ -11344,10 +11492,10 @@
           }
           const temp = weightedPick(currentRole.key);
           character.style.setProperty("--character-image", cssImage(temp));
-          character.style.setProperty("--character-x", `${Math.round(random(-3, 4))}px`);
-          character.style.setProperty("--character-y", `${Math.round(random(-2, 3))}px`);
+          character.style.setProperty("--character-x", `${Math.round(random(-1, 2))}px`);
+          character.style.setProperty("--character-y", `${Math.round(random(-1, 2))}px`);
           step += 1;
-          later(tick, random(24, 38));
+          later(tick, random(90, 140));
         };
 
         tick();
@@ -11364,7 +11512,7 @@
             switching = false;
             done();
           });
-        }, 50);
+        }, 130);
       };
 
       const ghostTransition = (targetRole, done) => {
@@ -11382,7 +11530,7 @@
             character.style.setProperty("--character-y", "0px");
             switching = false;
             done();
-          }, 100);
+          }, 210);
         });
       };
 
@@ -11398,7 +11546,7 @@
           character.classList.remove("is-glitching");
           switching = false;
           done();
-        }, 100);
+        }, 220);
       };
 
       const runTransition = (targetRole, forcedType = "") => {
@@ -11420,15 +11568,15 @@
 
       const scheduleNextSwitch = () => {
         if (!isMenuOpen()) return;
-        let delay = nextSwitchShortened ? random(900, 3000) : random(3000, 15000);
+        let delay = nextSwitchShortened ? random(2400, 5200) : random(6400, 18000);
         nextSwitchShortened = false;
-        if (chance(0.18)) delay *= random(0.45, 0.72);
-        if (chance(0.2)) delay += 2000;
+        if (chance(0.12)) delay *= random(0.7, 0.86);
+        if (chance(0.24)) delay += 1800;
 
         later(() => {
           if (!isMenuOpen()) return;
           const forceGlitch = Date.now() - lastSwitchAt > 10000;
-          const fakeChance = Date.now() < stillnessBonusUntil ? 0.3 : 0.1;
+          const fakeChance = Date.now() < stillnessBonusUntil ? 0.18 : 0.06;
           if (chance(fakeChance)) {
             fakeSwitch(scheduleNextSwitch);
             return;
@@ -11499,13 +11647,13 @@
       const scheduleLampFlicker = () => {
         later(() => {
           if (!isMenuOpen()) return;
-          const isBrightPop = chance(0.28);
-          menuLayout.style.setProperty("--menu-lamp-opacity", random(isBrightPop ? 0.72 : 0.12, isBrightPop ? 1 : 0.5).toFixed(3));
-          menuLayout.style.setProperty("--menu-lamp-brightness", random(isBrightPop ? 1.45 : 0.74, isBrightPop ? 2.18 : 1.22).toFixed(3));
-          menuLayout.style.setProperty("--menu-door-brightness", random(isBrightPop ? 1.08 : 0.82, isBrightPop ? 1.28 : 1.05).toFixed(3));
-          menuLayout.style.setProperty("--menu-door-contrast", random(isBrightPop ? 1.05 : 0.96, isBrightPop ? 1.14 : 1.06).toFixed(3));
+          const isBrightPop = chance(0.18);
+          menuLayout.style.setProperty("--menu-lamp-opacity", random(isBrightPop ? 0.56 : 0.22, isBrightPop ? 0.82 : 0.46).toFixed(3));
+          menuLayout.style.setProperty("--menu-lamp-brightness", random(isBrightPop ? 1.22 : 0.88, isBrightPop ? 1.62 : 1.18).toFixed(3));
+          menuLayout.style.setProperty("--menu-door-brightness", random(isBrightPop ? 1.02 : 0.9, isBrightPop ? 1.16 : 1.04).toFixed(3));
+          menuLayout.style.setProperty("--menu-door-contrast", random(isBrightPop ? 1.02 : 0.98, isBrightPop ? 1.09 : 1.04).toFixed(3));
           scheduleLampFlicker();
-        }, chance(0.24) ? random(140, 420) : random(820, 2400));
+        }, chance(0.18) ? random(520, 920) : random(1400, 3400));
       };
 
       const scheduleUiUntrust = () => {
@@ -11533,30 +11681,30 @@
       const scheduleWallLife = () => {
         later(() => {
           if (!isMenuOpen()) return;
-          menuLayout.style.setProperty("--wall-breath", random(1.006, 1.018).toFixed(4));
-          menuLayout.style.setProperty("--wall-stain-opacity", random(0.54, 0.72).toFixed(3));
-          menuLayout.style.setProperty("--wall-stain-x", `${Math.round(random(-6, 7))}px`);
-          menuLayout.style.setProperty("--wall-stain-y", `${Math.round(random(-5, 6))}px`);
-          menuLayout.style.setProperty("--wall-shadow-x", `${Math.round(random(-12, 13))}px`);
-          menuLayout.style.setProperty("--wall-shadow-y", `${Math.round(random(-7, 8))}px`);
-          menuLayout.style.setProperty("--wall-shadow-opacity", random(0.36, 0.58).toFixed(3));
-          menuLayout.style.setProperty("--wall-human-x", `${Math.round(random(-28, 34))}px`);
-          menuLayout.style.setProperty("--wall-human-opacity", chance(0.5) ? random(0.045, 0.12).toFixed(3) : random(0.018, 0.05).toFixed(3));
+          menuLayout.style.setProperty("--wall-breath", random(1.003, 1.011).toFixed(4));
+          menuLayout.style.setProperty("--wall-stain-opacity", random(0.48, 0.62).toFixed(3));
+          menuLayout.style.setProperty("--wall-stain-x", `${Math.round(random(-3, 4))}px`);
+          menuLayout.style.setProperty("--wall-stain-y", `${Math.round(random(-3, 4))}px`);
+          menuLayout.style.setProperty("--wall-shadow-x", `${Math.round(random(-7, 8))}px`);
+          menuLayout.style.setProperty("--wall-shadow-y", `${Math.round(random(-4, 5))}px`);
+          menuLayout.style.setProperty("--wall-shadow-opacity", random(0.32, 0.5).toFixed(3));
+          menuLayout.style.setProperty("--wall-human-x", `${Math.round(random(-18, 22))}px`);
+          menuLayout.style.setProperty("--wall-human-opacity", chance(0.5) ? random(0.035, 0.075).toFixed(3) : random(0.014, 0.038).toFixed(3));
           scheduleWallLife();
-        }, random(1800, 5200));
+        }, random(3600, 7800));
       };
 
       const scheduleShadowJump = () => {
         later(() => {
           if (!isMenuOpen()) return;
-          menuLayout.style.setProperty("--wall-shadow-x", `${Math.round(random(-20, 21))}px`);
-          menuLayout.style.setProperty("--wall-shadow-y", `${Math.round(random(-10, 11))}px`);
-          menuLayout.style.setProperty("--wall-shadow-opacity", random(0.52, 0.72).toFixed(3));
+          menuLayout.style.setProperty("--wall-shadow-x", `${Math.round(random(-10, 11))}px`);
+          menuLayout.style.setProperty("--wall-shadow-y", `${Math.round(random(-6, 7))}px`);
+          menuLayout.style.setProperty("--wall-shadow-opacity", random(0.42, 0.58).toFixed(3));
           later(() => {
             menuLayout.style.setProperty("--wall-shadow-opacity", random(0.36, 0.5).toFixed(3));
-          }, 160);
+          }, 360);
           scheduleShadowJump();
-        }, random(8000, 16000));
+        }, random(12000, 22000));
       };
 
       const scheduleWatching = () => {
@@ -11580,20 +11728,20 @@
         later(() => {
           if (!isMenuOpen()) return;
           if (!watching && !switching) {
-            const motionX = random(-0.9, 1).toFixed(2);
-            const motionY = random(-0.65, 0.75).toFixed(2);
-            character.style.setProperty("--character-scale", random(1.000, 1.008).toFixed(4));
-            character.style.setProperty("--character-brightness", random(1.26, 1.38).toFixed(3));
+            const motionX = random(-0.42, 0.46).toFixed(2);
+            const motionY = random(-0.32, 0.36).toFixed(2);
+            character.style.setProperty("--character-scale", random(1.000, 1.005).toFixed(4));
+            character.style.setProperty("--character-brightness", random(1.16, 1.28).toFixed(3));
             character.style.setProperty("--character-x", `${motionX}px`);
             character.style.setProperty("--character-y", `${motionY}px`);
             character.style.setProperty("--character-opacity", random(0.98, 1).toFixed(3));
-            if (chance(0.085)) {
+            if (chance(0.035)) {
               character.classList.add("is-flash");
-              later(() => character.classList.remove("is-flash"), random(18, 58));
+              later(() => character.classList.remove("is-flash"), random(90, 160));
             }
           }
           scheduleLivingMotion();
-        }, random(780, 1500));
+        }, random(1400, 2600));
       };
 
       const scheduleNoise = () => {
@@ -11601,10 +11749,10 @@
           if (!isMenuOpen()) return;
           menuNoise.style.setProperty("--noise-x", `${Math.round(random(-8, 9))}px`);
           menuNoise.style.setProperty("--noise-y", `${Math.round(random(-5, 6))}px`);
-          menuNoise.style.opacity = (0.16 + (Number(getComputedStyle(menuLayout).getPropertyValue("--wall-noise-boost")) || 0) + random(0, 0.06)).toFixed(3);
-          menuCrt.style.setProperty("--menu-crt-opacity", random(0.18, 0.32).toFixed(3));
+          menuNoise.style.opacity = (0.11 + (Number(getComputedStyle(menuLayout).getPropertyValue("--wall-noise-boost")) || 0) + random(0, 0.035)).toFixed(3);
+          menuCrt.style.setProperty("--menu-crt-opacity", random(0.14, 0.24).toFixed(3));
           scheduleNoise();
-        }, random(160, 360));
+        }, random(360, 780));
       };
 
       const handlePointerMove = (event) => {
