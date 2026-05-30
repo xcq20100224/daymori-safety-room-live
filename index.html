@@ -8116,6 +8116,74 @@
       opacity: 0.68 !important;
     }
 
+    /* Smooth monitor pass: circular flashlight and lighter continuous redraw. */
+    .camera-feed {
+      animation-duration: 6.2s !important;
+      will-change: auto !important;
+    }
+
+    .camera-feed::before {
+      animation-duration: 240ms !important;
+    }
+
+    .camera-static-layer {
+      opacity: 0.18 !important;
+      animation-duration: 18s, 3.4s !important;
+      will-change: auto !important;
+    }
+
+    .classroom-b-scene {
+      animation-duration: 5.8s !important;
+      will-change: auto !important;
+    }
+
+    .camera-feed.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room3.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room4.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room6.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room7.monitor-flashlight-active .camera-monitor-flash,
+    .camera-feed.is-room8.monitor-flashlight-active .camera-monitor-flash {
+      background:
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(247, 251, 255, 0.36) 0vmin, rgba(229, 240, 252, 0.24) 6vmin, rgba(186, 205, 224, 0.1) 13vmin, rgba(0, 0, 0, 0) 20vmin),
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(222, 235, 250, 0.12) 0vmin, rgba(178, 199, 220, 0.052) 22vmin, rgba(0, 0, 0, 0) 34vmin),
+        radial-gradient(circle at var(--cam-flash-x) var(--cam-flash-y), rgba(0, 0, 0, 0) 0vmin, rgba(0, 0, 0, 0.08) 24vmin, rgba(0, 0, 0, 0.34) 46vmin) !important;
+      opacity: 0.66 !important;
+      filter: saturate(0.3) contrast(1.04) !important;
+    }
+
+    .camera-feed.monitor-flashlight-active .classroom-b-scene,
+    .camera-feed.is-room3.monitor-flashlight-active .classroom-b-scene,
+    .camera-feed.is-room4.monitor-flashlight-active .classroom-b-scene,
+    .camera-feed.is-room6.monitor-flashlight-active .classroom-b-scene,
+    .camera-feed.is-room7.monitor-flashlight-active .classroom-b-scene,
+    .camera-feed.is-room8.monitor-flashlight-active .classroom-b-scene {
+      filter: contrast(1.2) saturate(0.68) brightness(1.09) grayscale(0.04) !important;
+    }
+
+    .camera-feed.monitor-flashlight-active .classroom-b-scene::before,
+    .camera-feed.is-room3.monitor-flashlight-active .classroom-b-scene::before,
+    .camera-feed.is-room4.monitor-flashlight-active .classroom-b-scene::before,
+    .camera-feed.is-room6.monitor-flashlight-active .classroom-b-scene::before,
+    .camera-feed.is-room7.monitor-flashlight-active .classroom-b-scene::before,
+    .camera-feed.is-room8.monitor-flashlight-active .classroom-b-scene::before {
+      background:
+        radial-gradient(circle at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(247, 251, 255, 0.28) 0vmin, rgba(205, 222, 238, 0.12) 11vmin, rgba(0, 0, 0, 0) 22vmin),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.13)) !important;
+      opacity: 0.7 !important;
+    }
+
+    .camera-feed.monitor-flashlight-active .classroom-b-scene::after,
+    .camera-feed.is-room3.monitor-flashlight-active .classroom-b-scene::after,
+    .camera-feed.is-room4.monitor-flashlight-active .classroom-b-scene::after,
+    .camera-feed.is-room6.monitor-flashlight-active .classroom-b-scene::after,
+    .camera-feed.is-room7.monitor-flashlight-active .classroom-b-scene::after,
+    .camera-feed.is-room8.monitor-flashlight-active .classroom-b-scene::after {
+      background:
+        radial-gradient(circle at var(--cam-flash-x, 50%) var(--cam-flash-y, 52%), rgba(0, 0, 0, 0) 0vmin, rgba(0, 0, 0, 0.14) 24vmin, rgba(0, 0, 0, 0.56) 44vmin),
+        radial-gradient(ellipse 54% 48% at 50% 52%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.42) 78%, rgba(0, 0, 0, 0.72) 100%) !important;
+      opacity: 0.66 !important;
+    }
+
     .room3-wall-sign,
     .room3-eye-spark,
     .room3-parts-label,
